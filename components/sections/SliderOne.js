@@ -16,7 +16,7 @@ const SliderOne = () => {
                             <div className="row no-gutters">
                                 <div className="col-xl-12 z-index-1">
                                     <h1 className="banner-one__title banner-one__light-color">Best <span className="style-font">online</span> <br />courses from <br />Tmero</h1>
-                                    <p className="banner-one__tag-line">are you ready to learn?</p>
+                                    <p className="banner-one__tag-line">Are you ready to learn?</p>
                                     <a href="/page-courses" class="theme-btn btn-style-one bg-theme-color2">Find Course</a>
                                 </div>
                             </div>

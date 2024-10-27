@@ -30,11 +30,11 @@ const Footer = () => {
                                     <h4 className="widget-title">Explore</h4>
                                     <ul className="user-links">
                                         <li><Link href="#">Gallery</Link></li>
-                                        <li><Link href="#">News &amp; Articles</Link></li>
-                                        <li><Link href="#">FAQ's</Link></li>
-                                        <li><Link href="#">Sign In/Registration</Link></li>
-                                        <li><Link href="#">Coming Soon</Link></li>
-                                        <li><Link href="#">Contacts</Link></li>
+                                        <li><Link href="/news-grid">News &amp; Articles</Link></li>
+                                        <li><Link href="/page-faq">FAQ's</Link></li>
+                                        <li><Link href="/log-in">Sign In/Registration</Link></li>
+                                        <li><Link href="/page-coming-soon">Coming Soon</Link></li>
+                                        <li><Link href="/page-contact">Contacts</Link></li>
                                     </ul>
                                 </div>
                             </div>
@@ -43,11 +43,11 @@ const Footer = () => {
                                 <div className="footer-widget">
                                     <h4 className="widget-title">Links</h4>
                                     <ul className="user-links">
-                                        <li><Link href="#">About</Link></li>
-                                        <li><Link href="#">Courses</Link></li>
-                                        <li><Link href="#">Instructor</Link></li>
+                                        <li><Link href="/page-about">About</Link></li>
+                                        <li><Link href="/page-courses">Courses</Link></li>
+                                        <li><Link href="/page-team">Instructor</Link></li>
                                         <li><Link href="#">Events</Link></li>
-                                        <li><Link href="#">Instructor Profile</Link></li>
+                                        <li><Link href="/page-team">Instructor Profile</Link></li>
                                     </ul>
                                 </div>
                             </div>

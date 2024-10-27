@@ -4,47 +4,34 @@ import React from 'react';
 const CourseTwo = () => {
     const data = [
         {
-            img: "course-1.jpg",
-            title: "Starting seo as your home based business",
+            img: "somali-session.webp",
+            title: "Learn Somali Easily from Your Own Home",
             price: 49.00,
             lesson: 8,
             students: 16,
         },
         {
-            img: "course-2.jpg",
-            title: "Starting seo as your home based business",
+            img: "amharic-session.webp",
+            title: "Learn Amharic Easily from Your Own Home",
             price: 49.00,
             lesson: 8,
             students: 16,
         },
         {
-            img: "course-3.jpg",
-            title: "Starting seo as your home based business",
+            img: "afaan-oromo-session.webp",
+            title: "Learn Afaan Oromo Easily from Your Own Home",
             price: 49.00,
             lesson: 8,
             students: 16,
         },
         {
-            img: "course-2.jpg",
-            title: "Starting seo as your home based business",
+            img: "tigrigna-session.webp",
+            title: "Learn Tigrigna Easily from Your Own Home",
             price: 49.00,
             lesson: 8,
             students: 16,
         },
-        {
-            img: "course-3.jpg",
-            title: "Starting seo as your home based business",
-            price: 49.00,
-            lesson: 8,
-            students: 16,
-        },
-        {
-            img: "course-1.jpg",
-            title: "Starting seo as your home based business",
-            price: 49.00,
-            lesson: 8,
-            students: 16,
-        }
+        //add more courses here
     ];
     return (
         <>

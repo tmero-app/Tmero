@@ -4,44 +4,28 @@ const TeamOne = () => {
     const data = [
         {
             img: "team-1.jpg",
-            title: "Edward norton",
-            desig: "Musician"
+            title: "Kalikadan Maru",
+            desig: "Amharic",
+            university: "University of Washington"
         },
         {
             img: "team-2.jpg",
-            title: "Jane seymour",
-            desig: "Designer"
+            title: "Khadija Hussein",
+            desig: "Somali",
+            university: "University of Washington"
         },
         {
             img: "team-3.jpg",
-            title: "Mike hardson",
-            desig: "Developer"
+            title: "Seena Mohammed",
+            desig: "Afaan Oromo",
+            university: "Seattle University"
         },
         {
             img: "team-4.jpg",
-            title: "Christine eve",
-            desig: "Artisit"
-        },
-        {
-            img: "team-4.jpg",
-            title: "Edward norton",
-            desig: "Musician"
-        },
-        {
-            img: "team-3.jpg",
-            title: "Jane seymour",
-            desig: "Designer"
-        },
-        {
-            img: "team-2.jpg",
-            title: "Mike hardson",
-            desig: "Developer"
-        },
-        {
-            img: "team-1.jpg",
-            title: "Christine eve",
-            desig: "Artisit"
-        },
+            title: "Adolina Tewolde",
+            desig: "Tigrigna",
+            university: "Washington State University"
+        }
     ];
     return (
         <>
