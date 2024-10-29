@@ -24,12 +24,13 @@ const Header1 = ({ handleOpen, handleRemove, searchToggle, handleToggle, scroll 
                         </nav>
                         <div className="outer-box">
                             <div className="ui-btn-outer">
-                                <button className="ui-btn ui-btn search-btn" onClick={handleToggle}>
+                                {/* <button className="ui-btn ui-btn search-btn" onClick={handleToggle}>
                                     <span className="icon lnr lnr-icon-search" />
                                 </button>
-                                <Link href="/#" className="ui-btn"><i className="lnr-icon-shopping-cart" /></Link>
+                                <Link href="/#" className="ui-btn"><i className="lnr-icon-shopping-cart" /></Link> */}
+                                <Link href="/sign-up" className="theme-btn btn-style-one"><span className="btn-title">Register Now</span></Link>
                             </div>
-                            <Link href="/page-contact" className="theme-btn btn-style-one"><span className="btn-title">Try For Free</span></Link>
+                           
                             <div className="mobile-nav-toggler" onClick={handleOpen}><span className="icon lnr-icon-bars" /></div>
                         </div>
                     </div>
