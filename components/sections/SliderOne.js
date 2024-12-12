@@ -17,7 +17,33 @@ const SliderOne = () => {
                                 <div className="col-xl-12 z-index-1">
                                     <h1 className="banner-one__title banner-one__light-color">Best <span className="style-font">online</span> <br />courses from <br />Tmero</h1>
                                     <p className="banner-one__tag-line">Are you ready to learn?</p>
-                                    <a href="/page-courses" class="theme-btn btn-style-one bg-theme-color2">Find Course</a>
+                                    <a
+                                      href="/page-courses"
+                                      className="theme-btn btn-style-one bg-theme-color2"
+                                      style={{
+                                        padding: '12px 40px',
+                                        fontSize: '14px',
+                                        display: 'inline-block',
+                                        marginRight: '10px'
+                                      }}
+                                    >
+                                      Find Course
+                                    </a>
+                                    <a
+                                      href="/log-in"
+                                      className="theme-btn btn-style-one bg-theme-color1"
+                                      style={{
+                                        padding: '12px 40px',
+                                        fontSize: '14px',
+                                        display: 'inline-block',
+                                        width: '170px', 
+                                        textAlign: 'center'
+                                      }}
+                                    >
+                                      Login
+                                    </a>
+
+    
                                 </div>
                             </div>
                         </div>
