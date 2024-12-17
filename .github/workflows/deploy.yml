@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - MAIN
+      - main
 
 name: 🚀 Deploy Angular app on push
 
