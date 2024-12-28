@@ -75,7 +75,7 @@
 
         .loginBtn {
             width: 100%;
-            padding: 15px 60px;
+            padding: 15px 20px;
             font-size: 14px;
             line-height: 24px;
             font-weight: 700;
@@ -151,7 +151,11 @@
                 }
             }
         }
-        
+        @media (min-width: 768px) { 
+            .loginBtn {
+              padding: 15px 60px; 
+            }
+          }
     }
 }
 
