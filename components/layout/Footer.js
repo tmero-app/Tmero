@@ -17,10 +17,11 @@ const Footer = () => {
                                     <div className="logo"><Link href="/"><img src="images/logo-2.png" title="Tmero" /></Link></div>
                                     <div className="text">Best online language courses from us</div>
                                     <ul className="social-icon-two">
-                                        <li><Link href="#"><i className="fab fa-twitter" /></Link></li>
-                                        <li><Link href="#"><i className="fab fa-facebook" /></Link></li>
-                                        <li><Link href="#"><i className="fab fa-pinterest" /></Link></li>
-                                        <li><Link href="#"><i className="fab fa-instagram" /></Link></li>
+                                        <li><a href="https://www.facebook.com/profile.php?id=61570942204502" target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook" /></a></li>
+                                        <li><a href="https://www.instagram.com/tmeroedu/" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram" /></a></li>
+                                        <li><a href="https://wa.me/+12067596659" target="_blank" rel="noopener noreferrer"><i className="fab fa-whatsapp" /></a></li>
+                                        <li><a href="https://www.tiktok.com/@tmero.com" target="_blank" rel="noopener noreferrer"><img src="/images/icons/tiktok.svg" style={{ width: '19px', height: '19px'}} /></a></li>
+                                        <li><a href="https://t.me/tmeroedu" target="_blank" rel="noopener noreferrer"><i className="fab fa-telegram" /></a></li>
                                     </ul>
                                 </div>
                             </div>
