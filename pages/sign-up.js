@@ -1,7 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import styles from './../public/scss/SignupPage.module.scss'; 
 
 const SignupPage = () => {
+    const router = useRouter();
+    const [formData, setFormData] = useState({
+        parentFullName: '',
+        phoneNumber: '',
+        email: '',
+        password: '',
+        language: '',
+        state: '',
+        studentName: '',
+    });
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        localStorage.setItem('signupData', JSON.stringify(formData));
+        router.push('/payment');
+    };
+
     return (
         <div className={styles.signupPageWrapper}>
             <section className={styles.signupSectionCentered}>
@@ -11,7 +34,7 @@ const SignupPage = () => {
                         <div className={styles.signupTitle}>
                             <h2>Join Tmero<br /> Unlock a World of<br /> Language Learning for<br />Your Child!</h2>
                             <div className={styles.signupDescription}>
-                            Embark on an Exciting Journey of Discovery and Communication!
+                                Embark on an Exciting Journey of Discovery and Communication!
                             </div>
                         </div>
                     </div>
@@ -19,21 +42,21 @@ const SignupPage = () => {
                     {/* Form Column */}
                     <div className={styles.signupFormColumn}>
                         <div className={styles.signupFormInner}>
-                            <form method="post" action="get" id="signup-form">
+                            <form onSubmit={handleSubmit}>
                                 <div className={styles.formGroup}>
-                                    <input type="text" name="parent_full_name" placeholder="Parent Full Name" required />
+                                    <input type="text" name="parentFullName" placeholder="Parent Full Name" required onChange={handleInputChange} />
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <input type="text" name="phone_number" placeholder="Phone Number" required />
+                                    <input type="text" name="phoneNumber" placeholder="Phone Number" required onChange={handleInputChange} />
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <input type="email" name="email" placeholder="Email" required />
+                                    <input type="email" name="email" placeholder="Email" required onChange={handleInputChange} />
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <input type="password" name="password" placeholder="Password" required />
+                                    <input type="password" name="password" placeholder="Password" required onChange={handleInputChange} />
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <select className="custom-select" required>
+                                    <select name="language" required onChange={handleInputChange}>
                                         <option value="">Select Language</option>
                                         <option value="Afaan Oromo">Afaan Oromo</option>
                                         <option value="Amharic">Amharic</option>
@@ -42,13 +65,13 @@ const SignupPage = () => {
                                     </select>
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <input type="text" name="state" placeholder="State" required />
+                                    <input type="text" name="state" placeholder="State" required onChange={handleInputChange} />
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <input type="text" name="student_name" placeholder="Student Name" required />
+                                    <input type="text" name="studentName" placeholder="Student Name" required onChange={handleInputChange} />
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <button className={styles.signupBtn} type="submit" name="submit-form">Sign Up</button>
+                                    <button className={styles.signupBtn} type="submit">Sign Up</button>
                                 </div>
                                 <div className={styles.signupRedirect}>
                                     Already have an account? <a href="/log-in">Log in</a>
