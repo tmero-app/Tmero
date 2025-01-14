@@ -79,7 +79,7 @@ const PaymentPage = () => {
         fetchClientSecret();
     }, []);
 
-    if (!clientSecret) return <div>Loading....</div>; // Include "Loading..."
+    if (!clientSecret) return <div>Loading....</div>; 
 
     return (
         <div className={styles.paymentPageWrapper}>
