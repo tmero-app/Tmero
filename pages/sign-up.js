@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import styles from './../public/scss/SignupPage.module.scss'; 
 
 const SignupPage = () => {
-    const router = useRouter();
     const [formData, setFormData] = useState({
         parentFullName: '',
         phoneNumber: '',
@@ -21,8 +20,12 @@ const SignupPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        
+        
         localStorage.setItem('signupData', JSON.stringify(formData));
-        router.push('/payment');
+
+        
+        window.location.href = '/payment';
     };
 
     return (

@@ -6,7 +6,7 @@ import styles from './../public/scss/PaymentPage.module.scss';
 
 const stripePromise = loadStripe('pk_test_51N4dxGIJjqQ6w4V59eH13SRGXkG0L7M7c6QhKJZL5U3LEphpT9u6R2VyJuBBsC9SWGu8P97WWGp3ckhq9yT8ZdSR0054LGHioJ');
 
-const PaymentForm = () => {
+const PaymentForm = ({ clientSecret }) => {
     const router = useRouter();
     const stripe = useStripe();
     const elements = useElements();
@@ -14,9 +14,7 @@ const PaymentForm = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if (!elements || !stripe) {
-            return;
-        }
+        if (!elements || !stripe) return;
 
         const { error, paymentIntent } = await stripe.confirmPayment({
             elements,
@@ -63,7 +61,7 @@ const PaymentForm = () => {
 
 const PaymentPage = () => {
     const [clientSecret, setClientSecret] = useState('');
-    
+
     useEffect(() => {
         async function fetchClientSecret() {
             try {
@@ -81,7 +79,7 @@ const PaymentPage = () => {
         fetchClientSecret();
     }, []);
 
-    if (!clientSecret) return null;
+    if (!clientSecret) return <div>Loading....</div>; // Include "Loading..."
 
     return (
         <div className={styles.paymentPageWrapper}>
@@ -93,7 +91,7 @@ const PaymentPage = () => {
                     </div>
                     <div className={styles.paymentFormColumn}>
                         <Elements stripe={stripePromise} options={{ clientSecret }}>
-                            <PaymentForm />
+                            <PaymentForm clientSecret={clientSecret} />
                         </Elements>
                     </div>
                 </div>
