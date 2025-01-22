@@ -21,7 +21,7 @@ const AboutTwo = () => {
                                         <div className="inner-box">
                                             <span className="info-text">Top Language Learning Experience</span>
                                             <div className="info-box">
-                                                <div className="thumb"><img src="images/resource/avatar-1.jpg" title="Tmero" /></div>
+                                                <div className="thumb"><img src="images/resource/selim.webp" title="Tmero" /></div>
                                                 <h5 className="name">Selim</h5>
                                                 <span className="designation">Student</span>
                                             </div>
@@ -31,7 +31,7 @@ const AboutTwo = () => {
                                         <div className="inner-box">
                                             <span className="info-text">Outstanding Language Program</span>
                                             <div className="info-box">
-                                                <div className="thumb"><img src="images/resource/avatar-2.jpg" title="Tmero" /></div>
+                                                <div className="thumb"><img src="images/resource/elias.webp" title="Tmero" /></div>
                                                 <h5 className="name">Elias M.</h5>
                                                 <span className="designation">TEACHER</span>
                                             </div>
@@ -48,7 +48,7 @@ const AboutTwo = () => {
                                     <span className="icon icon-dotted-line" />
                                     <span className="icon icon-papper-plan" />
                                 </div>
-                                <figure className="image overlay-anim wow fadeInUp"><img src="images/resource/about-3.jpg" title="Tmero" />
+                                <figure className="image overlay-anim wow fadeInUp"><img src="images/resource/child.webp" title="Tmero" />
                                 </figure>
                             </div>
                         </div>

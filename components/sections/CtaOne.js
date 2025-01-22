@@ -22,7 +22,7 @@ const CtaOne = () => {
                             </div>
                         </div>
                         <div className="image-column col-lg-4 col-md-12">
-                            <figure className="image"><img src="images/resource/cta.png" title="Tmero" /></figure>
+                            <figure className="image"><img src="images/resource/certificate.png" title="Tmero" /></figure>
                         </div>
                     </div>
                 </div>

@@ -8,7 +8,7 @@ export default function Home() {
     return (
         <>
             <Layout HeaderStyle="one">
-                <PageTitle pageName="Courses Grid" />
+                <PageTitle pageName="Courses" />
                 <CoursesInner />
             </Layout>
         </>
