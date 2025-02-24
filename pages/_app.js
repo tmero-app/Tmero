@@ -7,26 +7,35 @@ import '../public/css/responsive.css';
 import { useEffect, useState } from "react";
 
 function MyApp({ Component, pageProps }) {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [isClient, setIsClient] = useState(false);
+
     useEffect(() => {
-        setLoading(true);
+        setIsClient(true); 
+
         setTimeout(() => {
             setLoading(false);
         }, 2000);
 
-        const WOW = require('wowjs');
-        window.wow = new WOW.WOW({
-            live: false
+        import('wowjs').then((WOW) => {
+            const wowInstance = new WOW.WOW({ live: false });
+            wowInstance.init();
         });
-        window.wow.init();
     }, []);
-    return (<>
-        {!loading ? (
-            <Component {...pageProps} />
-        ) : (
-            <div class="preloader"></div>
-        )}
-    </>)
+
+    if (!isClient) {
+        return null; 
+    }
+
+    return (
+        <>
+            {!loading ? (
+                <Component {...pageProps} />
+            ) : (
+                <div className="preloader"></div>
+            )}
+        </>
+    );
 }
 
-export default MyApp
+export default MyApp;
