@@ -17,10 +17,10 @@ function MyApp({ Component, pageProps }) {
             setLoading(false);
         }, 2000);
 
-        import('wowjs').then((WOW) => {
-            const wowInstance = new WOW.WOW({ live: false });
-            wowInstance.init();
-        });
+        // import('wowjs').then((WOW) => {
+        //     const wowInstance = new WOW.WOW({ live: false });
+        //     wowInstance.init();
+        // });
     }, []);
 
     if (!isClient) {

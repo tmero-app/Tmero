@@ -31,10 +31,10 @@ const Layout = ({ children, HeaderStyle }) => {
     };
 
     useEffect(() => {
-        import('wowjs').then((WOW) => {
-            const wowInstance = new WOW.WOW({ live: false });
-            wowInstance.init();
-        });
+        // import('wowjs').then((WOW) => {
+        //     const wowInstance = new WOW.WOW({ live: false });
+        //     wowInstance.init();
+        // });
     }, []);
 
     return (
