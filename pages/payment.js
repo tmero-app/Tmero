@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router'; 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import styles from './../public/scss/PaymentPage.module.scss';
@@ -61,10 +61,13 @@ const PaymentForm = ({ clientSecret }) => {
 
 const PaymentPage = () => {
     const [clientSecret, setClientSecret] = useState('');
+    const [isLoading, setIsLoading] = useState(true); 
 
     useEffect(() => {
-        async function fetchClientSecret() {
+        const fetchClientSecret = async () => {
             try {
+                setIsLoading(true);
+
                 const response = await fetch("https://api.tmero.com/payment", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -74,12 +77,23 @@ const PaymentPage = () => {
                 setClientSecret(data.data.clientSecret);
             } catch (error) {
                 console.error('Error fetching client secret:', error);
+            } finally {
+                setIsLoading(false);
             }
-        }
+        };
+
         fetchClientSecret();
     }, []);
 
-    if (!clientSecret) return <div>Loading....</div>; 
+    if (isLoading) {
+        return (
+            <div className="preloader"> 
+                
+            </div>
+        );
+    }
+
+    if (!clientSecret) return null; 
 
     return (
         <div className={styles.paymentPageWrapper}>

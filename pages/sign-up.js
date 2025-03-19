@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
 import styles from './../public/scss/SignupPage.module.scss'; 
 
 const SignupPage = () => {
     const [formData, setFormData] = useState({
-        parentFullName: '',
+        parentFullname: '',
         phoneNumber: '',
-        email: '',
+        username: '',
         password: '',
-        language: '',
+        courses: '', 
         state: '',
         studentName: '',
     });
@@ -20,11 +19,36 @@ const SignupPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
-        
-        localStorage.setItem('signupData', JSON.stringify(formData));
 
-        
+        // Mapping the selected language to corresponding course ID
+        let courseId = null;
+        switch (formData.courses) {
+            case 'Afaan Oromo':
+                courseId = 1;
+                break;
+            case 'Amharic':
+                courseId = 2;
+                break;
+            case 'Somali':
+                courseId = 3;
+                break;
+            case 'Tigrigna':
+                courseId = 4;
+                break;
+            default:
+                break;
+        }
+
+        // Updating the courses field to an array of course ID
+        const updatedFormData = { 
+            ...formData, 
+            courses: [courseId] 
+        };
+
+        // Store updated data to localStorage
+        localStorage.setItem('signupData', JSON.stringify(updatedFormData));
+
+        // Redirect to the payment page
         window.location.href = '/payment';
     };
 
@@ -47,19 +71,19 @@ const SignupPage = () => {
                         <div className={styles.signupFormInner}>
                             <form onSubmit={handleSubmit}>
                                 <div className={styles.formGroup}>
-                                    <input type="text" name="parentFullName" placeholder="Parent Full Name" required onChange={handleInputChange} />
+                                    <input type="text" name="parentFullname" placeholder="Parent Full Name" required onChange={handleInputChange} />
                                 </div>
                                 <div className={styles.formGroup}>
                                     <input type="text" name="phoneNumber" placeholder="Phone Number" required onChange={handleInputChange} />
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <input type="email" name="email" placeholder="Email" required onChange={handleInputChange} />
+                                    <input type="email" name="username" placeholder="Email" required onChange={handleInputChange} />
                                 </div>
                                 <div className={styles.formGroup}>
                                     <input type="password" name="password" placeholder="Password" required onChange={handleInputChange} />
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <select name="language" required onChange={handleInputChange}>
+                                    <select name="courses" required onChange={handleInputChange}>
                                         <option value="">Select Language</option>
                                         <option value="Afaan Oromo">Afaan Oromo</option>
                                         <option value="Amharic">Amharic</option>
