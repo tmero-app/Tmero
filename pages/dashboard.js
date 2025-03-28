@@ -183,6 +183,7 @@ const Dashboard = () => {
           <div className={styles.triviaModalContent}>
             <button className={styles.triviaCloseButton} onClick={closeTrivia}>X</button>
             <h3>{activeTriviaModule.title} Trivia</h3>
+
             {isTriviaCompleted ? (
               <div className={styles.triviaQuestionSection}>
                 <p>Quiz Completed! Your score: {triviaScore} / {activeTriviaModule.trivia.length}</p>
@@ -191,7 +192,14 @@ const Dashboard = () => {
             ) : (
               activeTriviaModule.trivia.length > 0 && (
                 <div className={styles.triviaQuestionSection}>
+
+                  {/* Question Progress Indicator */}
+                  <p className={styles.triviaProgress}>
+                    Question {currentTriviaQuestion + 1} / {activeTriviaModule.trivia.length}
+                  </p>
+              
                   <p>{activeTriviaModule.trivia[currentTriviaQuestion].question}</p>
+
                   <div className={styles.triviaOptions}>
                     {activeTriviaModule.trivia[currentTriviaQuestion].options.map((option, idx) => (
                       <button 
@@ -204,6 +212,7 @@ const Dashboard = () => {
                       </button>
                     ))}
                   </div>
+                  
                   {selectedTriviaAnswer && (
                     <div className={styles.triviaFeedback}>
                       <p>{triviaFeedback}</p>
@@ -216,6 +225,7 @@ const Dashboard = () => {
           </div>
         </div>
       )}
+
     </div>
   );
 };

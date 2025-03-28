@@ -176,8 +176,22 @@
     cursor: pointer;
 }
 
+/*Question Progress */
+.triviaProgress {
+    font-size: 14px !important; 
+    font-weight: normal !important; 
+    color: #555 !important; 
+    margin-bottom: 5px;
+    text-align: right;
+}
+
 .triviaQuestionSection {
     margin-top: 20px;
+    p {
+        font-size: 24px; 
+        font-weight: bold;
+        color: #222; 
+    }
 }
 
 .triviaOptions {
@@ -216,6 +230,7 @@
     border-radius: 6px;
     cursor: pointer;
 }
+
 
 /* Responsive */
 @media (max-width: 768px) {
