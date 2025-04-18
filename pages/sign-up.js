@@ -17,10 +17,10 @@ const SignupPage = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // Mapping the selected language to corresponding course ID
+    
+        // Map selected language to course ID
         let courseId = null;
         switch (formData.courses) {
             case 'Afaan Oromo':
@@ -38,19 +38,37 @@ const SignupPage = () => {
             default:
                 break;
         }
-
-        // Updating the courses field to an array of course ID
-        const updatedFormData = { 
-            ...formData, 
-            courses: [courseId] 
+    
+        const updatedFormData = {
+            ...formData,
+            courses: [courseId],
         };
-
-        // Store updated data to localStorage
-        localStorage.setItem('signupData', JSON.stringify(updatedFormData));
-
-        // Redirect to the payment page
-        window.location.href = '/payment';
+    
+        try {
+            const response = await fetch('https://api.tmero.com/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedFormData),
+            });
+    
+            if (!response.ok) throw new Error('Registration failed');
+    
+            const data = await response.json();
+    
+            // Store the token returned by backend
+            localStorage.setItem('registrationToken', data.data); 
+            localStorage.setItem('signupData', JSON.stringify(updatedFormData));
+    
+            // Redirect to payment page
+            window.location.href = '/payment';
+        } catch (error) {
+            console.error('Signup error:', error);
+            alert('There was a problem signing up. Please try again.');
+        }
     };
+    
 
     return (
         <div className={styles.signupPageWrapper}>
@@ -74,10 +92,10 @@ const SignupPage = () => {
                                     <input type="text" name="parentFullname" placeholder="Parent Full Name" required onChange={handleInputChange} />
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <input type="text" name="phoneNumber" placeholder="Phone Number" required onChange={handleInputChange} />
+                                <input type="tel" name="phoneNumber" placeholder="Phone Number" pattern="^\+?[1-9]\d{1,14}$" title="Enter a valid international phone number (e.g., +14155552671)" required onChange={handleInputChange} />
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <input type="email" name="username" placeholder="Email" required onChange={handleInputChange} />
+                                <input type="text" name="username" placeholder="Username (letters and numbers only)" pattern="[A-Za-z0-9]+" title="Username must contain only alphabetic characters (A-Z, a-z)" required onChange={handleInputChange} />
                                 </div>
                                 <div className={styles.formGroup}>
                                     <input type="password" name="password" placeholder="Password" required onChange={handleInputChange} />
