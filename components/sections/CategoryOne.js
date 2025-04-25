@@ -66,7 +66,7 @@ const CategoryOne = () => {
                                 <div className="icon-box">
                                     <i className="icon flaticon-web-2" />
                                 </div>
-                                <h6 className="title"><Link href="/page-course-details">Religion <br />Study</Link></h6>
+                                <h6 className="title"><Link href="/page-course-details">Parenting <br />Class</Link></h6>
                             </div>
                         </div>
                     </div>

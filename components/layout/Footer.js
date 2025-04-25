@@ -58,9 +58,9 @@ const Footer = () => {
                                     <h4 className="widget-title">Contact</h4>
                                     <div className="widget-content">
                                         <ul className="contact-info">
-                                            <li><i className="fa fa-phone-square" /> <Link href="tel:206-960-5972">206-960-5972</Link></li>
-                                            <li><i className="fa fa-envelope" /> <Link href="mailto:infoo@tmero.com">info@tmero.com</Link></li>
-                                            <li><i className="fa fa-map-marker-alt" /> SeaTac, WA 98198</li>
+                                            <li><i className="fa fa-phone-square" /> <Link href="tel:206-759-6659">206-759-6659</Link></li>
+                                            <li><i className="fa fa-envelope" /> <Link href="mailto:info@tmero.com">info@tmero.com</Link></li>
+                                            <li><i className="fa fa-map-marker-alt" /> Seattle, WA</li>
                                         </ul>
                                         <div className="subscribe-form">
                                             <form method="post" action="#">

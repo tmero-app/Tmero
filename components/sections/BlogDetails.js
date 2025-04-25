@@ -1,7 +1,24 @@
 import Link from 'next/link';
 import React from 'react';
 
-const BlogOne = ({ alternate }) => {
+const BlogOne = ({ blogData }) => {
+
+    const { title, description, videoUrl, comments, tags } = blogData || {
+        title: "Amharic Testimonials: Reconnecting Through Language",
+      description: "Heartfelt testimonials from families who rediscovered their bonds by speaking Amharic together—powered by Tmero.",
+      videoUrl: "https://www.youtube.com/embed/cU8ZcWKuOHo", 
+      comments: [
+        { 
+          name: "Alemu Desta (Father of 2)", 
+          text: "We started speaking Amharic during dinner. Tmero helped us reconnect not just with the language, but with each other." 
+        },
+        { 
+          name: "Selamawit Taye (Mom from DMV)", 
+          text: "My daughter now surprises me with phrases in Amharic. It's like watching a piece of our home come alive in her." 
+        }
+      ],
+      tags: ["Amharic"]
+    };
     return (
         <>
             <section className="blog-details">
@@ -10,92 +27,96 @@ const BlogOne = ({ alternate }) => {
                         <div className="col-xl-8 col-lg-7">
                             <div className="blog-details__left">
                                 <div className="blog-details__img">
-                                    <img src="/images/resource/news-details.jpg" title='Tmero' />
-                                    <div className="blog-details__date">
+                                     <div className="video-frame-wrapper">
+                                        <iframe
+                                            width="100%"
+                                            height="500"
+                                            src={videoUrl}
+                                            title="Tmero Video"
+                                            frameBorder="0"
+                                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                            allowFullScreen
+                                        ></iframe>
+                                    </div>
+                                    {/* <div className="blog-details__date">
                                         <span className="day">28</span>
                                         <span className="month">Aug</span>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <div className="blog-details__content">
                                     <ul className="list-unstyled blog-details__meta">
-                                        <li><Link href="/news-details"><i className="fas fa-user-circle"></i> Admin</Link> </li>
-                                        <li><Link href="/news-details"><i className="fas fa-comments"></i> 02
-                                            Comments</Link>
+                                        <li><Link href="#"><i className="fas fa-user-circle"></i> Admin</Link> </li>
+                                        <li><Link href="#"><i className="fas fa-comments"></i> {comments.length} Comments</Link>
                                         </li>
                                     </ul>
-                                    <h3 className="blog-details__title font-weight-600">Language Learning: Empowering Communication Across Cultures</h3>
-                                    <p className="blog-details__text-2">At Tmero, we believe that language is more than just words—it's the foundation of understanding and connection. Whether you're looking to learn Amharic, Afaan Oromo, Tigrigna, or Somali, our interactive lessons are tailored to make language acquisition fun, effective, and culturally immersive. Join us today and open the door to a world of opportunities!
-                                    </p>
-                                    {/* <p className="blog-details__text-2">Mauris non dignissim purus, ac commodo diam. Donec sit
-                                        amet lacinia nulla. Aliquam quis purus in justo pulvinar tempor. Aliquam tellus
-                                        nulla, sollicitudin at euismod nec, feugiat at nisi. Quisque vitae odio nec lacus
-                                        interdum tempus. Phasellus a rhoncus erat. Vivamus vel eros vitae est aliquet
-                                        pellentesque vitae et nunc. Sed vitae leo vitae nisl pellentesque semper.
-                                    </p>
-                                    <p className="blog-details__text-2">Mauris non dignissim purus, ac commodo diam. Donec sit
-                                        amet lacinia nulla. Aliquam quis purus in justo pulvinar tempor. Aliquam tellus
-                                        nulla, sollicitudin at euismod nec, feugiat at nisi. Quisque vitae odio nec lacus
-                                        interdum tempus. Phasellus a rhoncus erat. Vivamus vel eros vitae est aliquet
-                                        pellentesque vitae et nunc. Sed vitae leo vitae nisl pellentesque semper.
-                                    </p> */}
+                                    <h3 className="blog-details__title font-weight-600">{title}</h3>
+                                    <p className="blog-details__text-2">{description}</p>
                                 </div>
                                 <div className="blog-details__bottom">
-                                    <p className="blog-details__tags"> <span>Tags</span> <Link href="/news-details">Basics</Link> <Link href="/news-details">Insights</Link> </p>
-                                    <div className="blog-details__social-list"> <Link href="/news-details"><i className="fab fa-twitter"></i></Link> <Link href="/news-details"><i className="fab fa-facebook"></i></Link> <Link href="/news-details"><i className="fab fa-pinterest-p"></i></Link> <Link href="/news-details"><i className="fab fa-instagram"></i></Link> </div>
+                                    <p className="blog-details__tags"> <span>Tags</span> {tags.map((tag, index) => (
+                                        <Link href="#" key={index}>{tag}</Link>
+                                    ))} </p>
+                                    <div className="blog-details__social-list">
+                                      <a
+                                        href="https://www.facebook.com/profile.php?id=61570942204502"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                      >
+                                        <i className="fab fa-facebook" />
+                                      </a>
+                                      <a
+                                        href="https://www.instagram.com/tmeroedu/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                      >
+                                        <i className="fab fa-instagram" />
+                                      </a>
+                                      <a
+                                        href="https://wa.me/+12067596659"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                      >
+                                        <i className="fab fa-whatsapp" />
+                                      </a>
+                                      <a
+                                        href="https://www.tiktok.com/@tmero.com"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                      >
+                                        <img
+                                          src="/images/icons/tiktok2.svg"
+                                          alt="TikTok"
+                                          style={{ width: '19px', height: '19px' }}
+                                        />
+                                      </a>
+                                      <a
+                                        href="https://t.me/tmeroedu"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                      >
+                                        <i className="fab fa-telegram" />
+                                      </a>
+                                    </div>
                                 </div>
                                 <div className="nav-links">
                                     <div className="prev">
-                                        <Link href="/news-details" rel="prev">Building Bridges Through Language and Understanding</Link>
+                                        <Link href="#" rel="prev">Building Bridges Through Language and Understanding</Link>
                                     </div>
                                     <div className="next">
-                                        <Link href="/news-details" rel="next">Discover the Joy of Culturally Rich Language Learning</Link>
+                                        <Link href="#" rel="next">Discover the Joy of Culturally Rich Language Learning</Link>
                                     </div>
                                 </div>
                                 <div className="comment-one">
-                                    <h3 className="comment-one__title">2 Comments</h3>
-                                    <div className="comment-one__single">
-                                        <div className="comment-one__image"> <img src="/images/resource/testi-thumb-1.jpg" title='Oitech' /> </div>
+                                    <h3 className="comment-one__title">{comments.length} Comments</h3>
+                                    {comments.map((comment, index) => (
+                                    <div className="comment-one__single" key={index}>
                                         <div className="comment-one__content">
-                                            <h3>Hanna Kebede</h3>
-                                            <p className="blog-details__text-2">Learning Amharic has never been easier! Tmero's lessons are so engaging and practical.
-                                            </p>
-                                            <Link href="/news-details" className="theme-btn btn-style-one comment-one__btn"><span className="btn-title">Reply</span></Link>
+                                            <h3>{comment.name}</h3>
+                                            <p className="blog-details__text-2">{comment.text}</p>
+                                            {/* <Link href="#" className="theme-btn btn-style-one comment-one__btn"><span className="btn-title">Reply</span></Link> */}
                                         </div>
                                     </div>
-                                    <div className="comment-one__single">
-                                        <div className="comment-one__image"> <img src="/images/resource/testi-thumb-2.jpg" title='Oitech' /> </div>
-                                        <div className="comment-one__content">
-                                            <h3>Yusuf Ahmed</h3>
-                                            <p className="blog-details__text-2">I love how interactive the Afaan Oromo course is. It makes learning fun and memorable.
-                                            </p>
-                                            <Link href="/news-details" className="theme-btn btn-style-one comment-one__btn"><span className="btn-title">Reply</span></Link>
-                                        </div>
-                                    </div>
-                                    <div className="comment-form">
-                                        <h3 className="comment-form__title">Leave a Comment</h3>
-                                        <form id="contact_form" name="contact_form" className="" action="#">
-                                            <div className="row">
-                                                <div className="col-sm-6">
-                                                    <div className="mb-3">
-                                                        <input name="form_name" className="form-control" type="text" placeholder="Enter Name" />
-                                                    </div>
-                                                </div>
-                                                <div className="col-sm-6">
-                                                    <div className="mb-3">
-                                                        <input name="form_email" className="form-control required email" type="email" placeholder="Enter Email" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="mb-3">
-                                                <textarea name="form_message" className="form-control required" rows="5" placeholder="Enter Message" />
-                                            </div>
-                                            <div className="mb-3">
-                                                <input name="form_botcheck" className="form-control" type="hidden" value="" />
-                                                <button type="submit" className="theme-btn btn-style-one">
-                                                <span className="btn-title">Submit Comment</span></button>
-                                            </div>
-                                        </form>
-                                    </div>
+                                    ))}
                                 </div>
                             </div>
                         </div>
@@ -111,25 +132,25 @@ const BlogOne = ({ alternate }) => {
                                     <h3 className="sidebar__title">Latest Posts</h3>
                                     <ul className="sidebar__post-list list-unstyled">
                                         <li>
-                                            <div className="sidebar__post-image"> <img src="/images/resource/news-1.jpg" title='Tmero' /> </div>
+                                            {/* <div className="sidebar__post-image"> <img src="/images/resource/news-1.jpg" title='Tmero' /> </div> */}
                                             <div className="sidebar__post-content">
                                                 <h3> <span className="sidebar__post-content-meta"><i
-                                                    className="fas fa-user-circle"></i>Admin</span> <Link href="/news-details">5 Essential Tips for Mastering Afaan Oromo</Link>
+                                                    className="fas fa-user-circle"></i>Admin</span> <Link href="#">5 Essential Tips for Mastering Afaan Oromo</Link>
                                                 </h3>
                                             </div>
                                         </li>
                                         <li>
-                                            <div className="sidebar__post-image"> <img src="/images/resource/news-2.jpg" title='Tmero' /> </div>
+                                            {/* <div className="sidebar__post-image"> <img src="/images/resource/news-2.jpg" title='Tmero' /> </div> */}
                                             <div className="sidebar__post-content">
                                                 <h3> <span className="sidebar__post-content-meta"><i
-                                                    className="fas fa-user-circle"></i>Admin</span> <Link href="/news-details">Why Learning Amharic Is a Game-Changer for Your Career</Link> </h3>
+                                                    className="fas fa-user-circle"></i>Admin</span> <Link href="#">Why Learning Amharic Is a Game-Changer for Your Career</Link> </h3>
                                             </div>
                                         </li>
                                         <li>
-                                            <div className="sidebar__post-image"> <img src="/images/resource/news-3.jpg" title='Tmero' /> </div>
+                                            {/* <div className="sidebar__post-image"> <img src="/images/resource/news-3.jpg" title='Tmero' /> </div> */}
                                             <div className="sidebar__post-content">
                                                 <h3> <span className="sidebar__post-content-meta"><i
-                                                    className="fas fa-user-circle"></i>Admin</span> <Link href="/news-details">Interactive Somali Lessons: Learn Faster, Retain More</Link> </h3>
+                                                    className="fas fa-user-circle"></i>Admin</span> <Link href="#">Interactive Somali Lessons: Learn Faster, Retain More</Link> </h3>
                                             </div>
                                         </li>
                                     </ul>
@@ -137,15 +158,15 @@ const BlogOne = ({ alternate }) => {
                                 <div className="sidebar__single sidebar__category">
                                     <h3 className="sidebar__title">Categories</h3>
                                     <ul className="sidebar__category-list list-unstyled">
-                                        <li className="active"><Link href="/news-details">Language Learning Strategies<span
+                                        <li className="active"><Link href="#">Language Learning Strategies<span
                                             className="icon-right-arrow"></span></Link> </li>
-                                        <li><Link href="/news-details">Afaan Oromo Courses<span
+                                        <li><Link href="#">Online Courses<span
                                             className="icon-right-arrow"></span></Link></li>
-                                        <li><Link href="/news-details">Amharic Grammar Essentials<span
+                                        <li><Link href="#">Grammar Essentials<span
                                             className="icon-right-arrow"></span></Link> </li>
-                                        <li><Link href="/news-details">Cultural Education<span
+                                        <li><Link href="#">Cultural Education<span
                                             className="icon-right-arrow"></span></Link> </li>
-                                        <li><Link href="/news-details">Interactive Learning Techniques<span
+                                        <li><Link href="#">Interactive Learning Techniques<span
                                             className="icon-right-arrow"></span></Link> </li>
                                     </ul>
                                 </div>
@@ -156,20 +177,19 @@ const BlogOne = ({ alternate }) => {
                                 <div className="sidebar__single sidebar__comments">
                                     <h3 className="sidebar__title">Recent Comments</h3>
                                     <ul className="sidebar__comments-list list-unstyled">
-                                        <li>
-                                            <div className="sidebar__comments-icon"> <i className="fas fa-comments"></i> </div>
-                                            <div className="sidebar__comments-text-box">
-                                                <p> <span>Hanna Kebede</span> on</p>
-                                                <h5>comments</h5>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div className="sidebar__comments-icon"> <i className="fas fa-comments"></i> </div>
-                                            <div className="sidebar__comments-text-box">
-                                                <p> <span>Yusuf Ahmed</span> on</p>
-                                                <h5>comments</h5>
-                                            </div>
-                                        </li>
+                                    {blogData.comments.slice(0, 2).map((c, i) => (
+                                      <li key={i}>
+                                        <div className="sidebar__comments-icon">
+                                          <i className="fas fa-comments" />
+                                        </div>
+                                        <div className="sidebar__comments-text-box">
+                                          <p>
+                                          <span>{c.name.split(' (')[0]}</span> on
+                                          </p>
+                                          <h5>comments</h5>
+                                        </div>
+                                      </li>
+                                    ))}
                                     </ul>
                                 </div>
                             </div>

@@ -39,7 +39,7 @@ With expert trainers and interactive lessons, your child will not only learn how
                             <div className="inner-column wow fadeInLeft">
                                 <figure className="image-1 overlay-anim wow fadeInUp"><img src="images/resource/learning-family.webp" title="Tmero" /></figure>
                                 {/* <figure className="image-2 overlay-anim wow fadeInRight"><img src="images/resource/about-2.jpg" title="Tmero" /></figure> */}
-                                <div className="experience bounce-y"><span className="count">4</span>Languages, One Goal</div>
+                                <div className="experience bounce-y">Bond Through Language, Connect for Life</div>
                             </div>
                         </div>
                     </div>

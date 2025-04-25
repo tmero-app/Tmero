@@ -72,7 +72,7 @@ const Testimonial = () => {
                     <SwiperSlide className="testimonial-block">
                         <div className="inner-box">
                             <div className="content-box">
-                                <figure className="thumb"><img src={`images/resource/${item.img}`} title="Tmero" /></figure>
+                                {/* <figure className="thumb"><img src={`images/resource/${item.img}`} title="Tmero" /></figure> */}
                                 <div className="rating"><i className="fa fa-star" /><i className="fa fa-star" /><i className="fa fa-star" /><i className="fa fa-star" /><i className="fa fa-star" /></div>
                                 <div className="text">{item.testimonial}</div>
                                 <div className="info-box">

@@ -63,7 +63,7 @@ const ContactInner = () => {
                                         </div>
                                         <div className="text">
                                             <h6>Have any question?</h6>
-                                            <a href="tel:206-960-5972"><span>Free</span> +1 (206) 960-5972 </a>
+                                            <a href="tel:+12067596659"><span>Free</span> +1 (206) 759-6659 </a>
                                         </div>
                                     </li>
                                     <li>
