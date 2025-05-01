@@ -46,7 +46,7 @@ const BlogOne = ({ blogData }) => {
                                 <div className="blog-details__content">
                                     <ul className="list-unstyled blog-details__meta">
                                         <li><Link href="#"><i className="fas fa-user-circle"></i> Admin</Link> </li>
-                                        <li><Link href="#"><i className="fas fa-comments"></i> {comments.length} Comments</Link>
+                                        <li><Link href="#"><i className="fas fa-comments"></i> 200 Comments</Link>
                                         </li>
                                     </ul>
                                     <h3 className="blog-details__title font-weight-600">{title}</h3>
@@ -107,7 +107,7 @@ const BlogOne = ({ blogData }) => {
                                     </div>
                                 </div>
                                 <div className="comment-one">
-                                    <h3 className="comment-one__title">{comments.length} Comments</h3>
+                                    <h3 className="comment-one__title">200 Comments</h3>
                                     {comments.map((comment, index) => (
                                     <div className="comment-one__single" key={index}>
                                         <div className="comment-one__content">
@@ -117,6 +117,16 @@ const BlogOne = ({ blogData }) => {
                                         </div>
                                     </div>
                                     ))}
+                                </div>
+                                <div className="text-center mt-5">
+                                <Link 
+                                    href="https://docs.google.com/forms/d/e/1FAIpQLSfYw4pgvmdYKoptMakdjOcVbbOIfrrWiUwvJ8n3CF_BMgV8fg/viewform?usp=sharing" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    className="theme-btn btn-style-one"
+                                >
+                                    <span className="btn-title">Fill Out Our Form</span>
+                                  </Link>
                                 </div>
                             </div>
                         </div>

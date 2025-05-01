@@ -6,25 +6,25 @@ const NewsOne = () => {
         {
             id: "blog-1",
             img: "blog-1.webp",
-            title: "The quality role of the elementary teacher in education",
+            title: "Bilingual Communication Between Parents and Children: Building Stronger Family Bonds.",
             comment: 10
         },
         {
             id: "blog-2",
             img: "blog-2.webp",
-            title: "The quality role of the elementary teacher in education",
+            title: "Bridging the Cultural Gap: Teaching Parents About Modern Child-Parenting in the U.S.",
             comment: 10
         },
         {
             id: "blog-3",
             img: "blog-3.webp",
-            title: "The quality role of the elementary teacher in education",
+            title: "More Than Words: The Emotional Bond Built When Children Speak Their Parents’ Language.",
             comment: 10
         },
         {
             id: "blog-4",
             img: "blog-4.webp",
-            title: "The quality role of the elementary teacher in education",
+            title: "Parenting in the U.S. vs. Back Home: Learning Through Culturally Aware Education.",
             comment: 10
         }
     ];

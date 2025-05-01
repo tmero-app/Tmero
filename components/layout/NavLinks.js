@@ -1,17 +1,30 @@
+'use client';
+
 import Link from 'next/link';
 import React from 'react';
+import { usePathname } from 'next/navigation';
 
 const NavLinks = ({ extraClassName }) => {
-    return (
-        <ul className={`navigation ${extraClassName}`}>
-            <li className="current"><Link href="/">Home</Link></li>
-            <li><Link href="/page-about">About</Link></li>
-            <li><Link href="/page-courses">Courses</Link></li>
-            <li><Link href="/page-pricing">Pricing</Link></li>
-            <li><Link href="/page-faq">FAQ</Link></li>
-            <li><Link href="/page-contact">Contact</Link></li>
-        </ul>
-    );
+  const pathname = usePathname();
+
+  const navItems = [
+    { label: 'Home', href: '/' },
+    { label: 'About', href: '/page-about' },
+    { label: 'Courses', href: '/page-courses' },
+    { label: 'Pricing', href: '/page-pricing' },
+    { label: 'FAQ', href: '/page-faq' },
+    { label: 'Contact', href: '/page-contact' },
+  ];
+
+  return (
+    <ul className={`navigation ${extraClassName}`}>
+      {navItems.map(({ label, href }) => (
+        <li key={href} className={pathname === href ? 'current' : ''}>
+          <Link href={href}>{label}</Link>
+        </li>
+      ))}
+    </ul>
+  );
 };
 
 export default NavLinks;

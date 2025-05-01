@@ -13,7 +13,7 @@ const Courseone = ({ alternate }) => {
 						<div className="col-xl-8 col-lg-8">
 							<div className="courses-details__content">
 
-								<img src="images/resource/course-details.jpg" alt="" />
+								<img src="images/resource/course-overview.webp" alt="" />
 								<h2 className="mt-4">Course Overview</h2>
 								<p>At TMERO.com, we believe in nurturing confident and well-rounded learners through the power of language. Our courses are thoughtfully designed for young minds to explore languages like Afaan Oromo, Somali, Tigrigna, and Amharic through fun and engaging lessons.</p>
 								<p>In addition to building language proficiency, students will cultivate essential qualities such as curiosity, resilience, and cultural awareness. With our unique approach, your child will not only learn to communicate effectively but also develop the skills and mindset needed to thrive with self-confidence.</p>
@@ -30,7 +30,7 @@ const Courseone = ({ alternate }) => {
 													<i className="icon flaticon-elearning"></i>
 												</div>
 												<h4 className="title">Language for Life</h4>
-												<span className="sub-title">4 Courses</span>
+												<span className="sub-title">6 Courses</span>
 											</div>
 										</div>
 
@@ -40,7 +40,7 @@ const Courseone = ({ alternate }) => {
 													<i className="icon flaticon-study-1"></i>
 												</div>
 												<h4 className="title">Build Character</h4>
-												<span className="sub-title">4 Courses</span>
+												<span className="sub-title">6 Courses</span>
 											</div>
 										</div>
 
@@ -50,7 +50,7 @@ const Courseone = ({ alternate }) => {
 													<i className="icon flaticon-study"></i>
 												</div>
 												<h4 className="title">Real-Life Application</h4>
-												<span className="sub-title">4 Courses</span>
+												<span className="sub-title">6 Courses</span>
 											</div>
 										</div>
 									</div>

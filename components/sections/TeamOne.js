@@ -3,8 +3,8 @@ import React from 'react';
 const TeamOne = () => {
     const data = [
         {
-            img: "lina.webp",
-            title: "Lina Kalifa",
+            img: "rediet.webp",
+            title: "Rediet Girma",
             desig: "Amharic",
             university: "University of Washington"
         },

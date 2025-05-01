@@ -5498,6 +5498,7 @@ Section Title
 }
 
 .pricing-block {
+  max-width: 950px; 
   position: relative;
   margin-bottom: 40px;
   z-index: 2;
@@ -5545,8 +5546,11 @@ Section Title
   margin-bottom: 5px;
 }
 .pricing-block .price-box .title {
+  display: block;
+  width: 100%;
   position: relative;
-  font-size: 14px;
+  font-size: 32px;
+  text-align: center;
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -5562,7 +5566,7 @@ Section Title
   display: block;
   font-size: 16px;
   line-height: 30px;
-  color: #81868a;
+  color: #333333;
   font-weight: 400;
   margin-bottom: 10px;
 }

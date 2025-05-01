@@ -8,7 +8,7 @@ export default function Home() {
     return (
         <>
             <Layout HeaderStyle="one">
-                <PageTitle pageName="News Grid" />
+                <PageTitle pageName="News" />
                 <BlogInner />
             </Layout>
         </>
