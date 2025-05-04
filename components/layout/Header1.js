@@ -55,7 +55,7 @@ const Header1 = ({ handleOpen, handleRemove, searchToggle, handleToggle, scroll 
                                 <div className="contact-info-box">
                                     <span className="icon lnr-icon-envelope1" />
                                     <span className="title">Send Email</span>
-                                    <Link href="/mailto:help@company.com">info@tmero.com</Link>
+                                    <Link href="/mailto:ask@tmero.com">ask@tmero.com</Link>
                                 </div>
                             </li>
                             <li>

@@ -72,7 +72,7 @@ const ContactInner = () => {
                                         </div>
                                         <div className="text">
                                             <h6>Write email</h6>
-                                            <a href="mailto:info@tmero.com">info@tmero.com</a>
+                                            <a href="mailto:ask@tmero.com">ask@tmero.com</a>
                                         </div>
                                     </li>
                                     <li>
