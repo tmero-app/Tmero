@@ -5,7 +5,7 @@ const SignupPage = () => {
     const [formData, setFormData] = useState({
         parentFullname: '',
         phoneNumber: '',
-        username: '',
+        email: '',
         password: '',
         courses: '', 
         state: '',
@@ -95,7 +95,7 @@ const SignupPage = () => {
                                 <input type="tel" name="phoneNumber" placeholder="Phone Number" pattern="^\+?[1-9]\d{1,14}$" title="Enter a valid international phone number (e.g., +14155552671)" required onChange={handleInputChange} />
                                 </div>
                                 <div className={styles.formGroup}>
-                                <input type="text" name="username" placeholder="Username (letters and numbers only)" pattern="[A-Za-z0-9]+" title="Username must contain only alphabetic characters (A-Z, a-z)" required onChange={handleInputChange} />
+                                <input type="email" name="email" placeholder="Email" title="Please enter a valid email address" required onChange={handleInputChange} />
                                 </div>
                                 <div className={styles.formGroup}>
                                     <input type="password" name="password" placeholder="Password" required onChange={handleInputChange} />
