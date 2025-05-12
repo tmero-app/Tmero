@@ -3,26 +3,26 @@ import React from 'react';
 const TeamOne = () => {
     const data = [
         {
-            img: "team-1.jpg",
-            title: "Kalikadan Maru",
+            img: "rediet.webp",
+            title: "Rediet Girma",
             desig: "Amharic",
             university: "University of Washington"
         },
         {
-            img: "team-2.jpg",
-            title: "Khadija Hussein",
+            img: "sitra.webp",
+            title: "Sithra Mahamed",
             desig: "Somali",
             university: "University of Washington"
         },
         {
-            img: "team-3.jpg",
-            title: "Seena Mohammed",
+            img: "mahfa.webp",
+            title: "Mahfa Jafar",
             desig: "Afaan Oromo",
             university: "Seattle University"
         },
         {
-            img: "team-4.jpg",
-            title: "Adolina Tewolde",
+            img: "mary.webp",
+            title: "Mary Kesete",
             desig: "Tigrigna",
             university: "Washington State University"
         }
@@ -36,17 +36,17 @@ const TeamOne = () => {
                             <div className="team-block col-xl-3 col-lg-6 col-md-6 col-sm-12 wow fadeInUp">
                                 <div className="inner-box">
                                     <div className="image-box">
-                                        <figure className="image"><a href="/page-team-details"><img src={`images/resource/${item.img}`} title="Tmero" /></a></figure>
+                                        <figure className="image"><img src={`images/resource/${item.img}`} title="Tmero" /></figure>
                                         <span className="share-icon fa fa-share-alt" />
                                         <div className="social-links">
-                                            <a href="#"><i className="fab fa-twitter" /></a>
-                                            <a href="#"><i className="fab fa-facebook-f" /></a>
-                                            <a href="#"><i className="fab fa-pinterest-p" /></a>
-                                            <a href="#"><i className="fab fa-instagram" /></a>
+                                            <a href="https://wa.me/+12067596659" target="_blank" rel="noopener noreferrer"><i className="fab fa-whatsapp" /></a>
+                                            <a href="https://www.facebook.com/profile.php?id=61570942204502" target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook" /></a>
+                                            <a href="https://t.me/tmeroedu" target="_blank" rel="noopener noreferrer"><i className="fab fa-telegram" /></a>
+                                            <a href="https://www.instagram.com/tmeroedu/" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram" /></a>
                                         </div>
                                     </div>
                                     <div className="info-box">
-                                        <h4 className="name"><a href="#">{item.title}</a></h4>
+                                        <h4 className="name">{item.title}</h4>
                                         <span className="designation">{item.desig}</span>
                                     </div>
                                 </div>

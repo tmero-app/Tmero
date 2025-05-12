@@ -40,7 +40,7 @@ const TeamOne = () => {
                             <div className="team-block col-xl-3 col-lg-6 col-md-6 col-sm-12 wow fadeInUp">
                                 <div className="inner-box">
                                     <div className="image-box">
-                                        <figure className="image"><a href="#"><img src={`images/resource/${item.img}`} title="Tmero" /></a></figure>
+                                        <figure className="image"><img src={`images/resource/${item.img}`} title="Tmero" /></figure>
                                         <span className="share-icon fa fa-share-alt" />
                                         <div className="social-links">
                                             <a href="https://wa.me/+12067596659" target="_blank" rel="noopener noreferrer"><i className="fab fa-whatsapp" /></a>
@@ -50,7 +50,7 @@ const TeamOne = () => {
                                         </div>
                                     </div>
                                     <div className="info-box">
-                                        <h4 className="name"><a href="/page-team-details">{item.title}</a></h4>
+                                        <h4 className="name">{item.title}</h4>
                                         <span className="designation">{item.desig}</span>
                                     </div>
                                 </div>
