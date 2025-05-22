@@ -1,78 +1,134 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ModalVideo from 'react-modal-video';
 import styles from '../public/scss/Dashboard.module.scss';
 
-// Add trivia to each module as needed
-//example mock data
-const mockModules = [
-  { 
-    title: "Week 1: Greetings", 
-    videoId: "dQw4w9WgXcQ", 
-    completed: true,
-    trivia: [
-      {
-        question: "What does 'Selam' mean?",
-        options: ["Goodbye", "Hello", "Please", "Thank you"],
-        correctAnswer: "Hello"
-      },
-      {
-        question: "Which greeting is common in Amharic?",
-        options: ["Dehna", "Tena Yistilign", "Amasegenallo", "Yikirta"],
-        correctAnswer: "Tena Yistilign"
-      }
-    ]
-  },
-  { 
-    title: "Week 2: Common Phrases", 
-    videoId: "3JZ_D3ELwOQ", 
-    completed: true,
-    trivia: [
-      {
-        question: "What is the Amharic word for 'Thank you'?",
-        options: ["Amesegenallo", "Selam", "Dehna", "Teanastilign"],
-        correctAnswer: "Amesegenallo"
-      }
-    ]
-  },
-  { 
-    title: "Week 3: Numbers & Counting", 
-    videoId: "cU8ZcWKuOHo", 
-    completed: false,
-    trivia: [
-      {
-        question: "How do you say 'one' in Amharic?",
-        options: ["And", "Kilo", "Hule", "Sost"],
-        correctAnswer: "And"
-      }
-    ]
-  },
-  { 
-    title: "Week 4: Family & Relationships", 
-    videoId: "oHg5SJYRHA0", 
-    completed: false,
-    trivia: [
-      {
-        question: "How do you say 'mother' in Amharic?",
-        options: ["Enat", "Abat", "Ehit", "Wondim"],
-        correctAnswer: "Enat"
-      },
-      {
-        question: "Which of the following means 'brother' in Amharic?",
-        options: ["Wondim", "Enat", "Abat", "Ehit"],
-        correctAnswer: "Wondim"
-      }
-    ] 
-  }
-];
-
-const userProgress = {
-  name: "Selim",
-  email: "Selim@gmail.com",
-  course: "Amharic for Beginners",
-  progress: 50 
-};
 
 const Dashboard = () => {
+
+  const [courseTitle, setCourseTitle] = useState('');
+  const [modules, setModules] = useState([]);
+
+
+  const [userProgress, setUserProgress] = useState({
+    name: '',
+    email: '',
+    course: '',
+    progress: 50, 
+  });
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      const token = localStorage.getItem('token'); 
+      if (!token) return;
+
+      try {
+        const res = await fetch('https://api.tmero.com/user/me', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const result = await res.json();
+
+        if (res.ok && result.data) {
+          setUserProgress((prev) => ({
+            ...prev,
+            name: result.data.studentName || 'Unknown',
+            email: result.data.email || 'Unknown',
+          }));
+        } else {
+          console.error('Failed to fetch user:', result.message);
+        }
+      } catch (err) {
+        console.error('Error fetching user:', err);
+      }
+    };
+
+    fetchUserDetails();
+  }, []);
+
+  const extractYouTubeVideoId = (url) => {
+  const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|embed|watch)|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+  const match = url.match(regex);
+  return match ? match[1] : null;
+};
+
+
+  useEffect(() => {
+  const fetchCourseAndOutline = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+      //Get course ID and title
+      const courseRes = await fetch('https://api.tmero.com/user/courses', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const courseData = await courseRes.json();
+
+      if (!courseRes.ok || !courseData?.data?.length) {
+        console.error('Failed to fetch courses');
+        return;
+      }
+
+      const course = courseData.data[0]; 
+      const courseId = course.id;
+      setCourseTitle(course.title); 
+
+      //Get outlines for that course
+      const outlineRes = await fetch(`https://api.tmero.com/user/courses/${courseId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const outlineData = await outlineRes.json();
+
+      if (!outlineRes.ok || !outlineData?.data?.length) {
+        console.error('Failed to fetch outlines');
+        return;
+      }
+
+      const outlines = outlineData.data[0].outlines;
+
+      //Map outlines to expected format
+    const formattedModules = outlines.map((outline, index) => ({
+  title: `Week ${index + 1}: ${outline.outline}`,
+  videoId: outline.youtubeUrl.split('v=')[1],
+  completed: false,
+  trivia: (outline.trivia || []).map(triviaItem => {
+    let options = [];
+
+    try {
+      let answersString = triviaItem.answers.join(',');
+      answersString = answersString.trim();
+      if (answersString.startsWith('[')) answersString = answersString.slice(1);
+      if (answersString.endsWith(']')) answersString = answersString.slice(0, -1);
+      answersString = `[${answersString}]`;
+      options = JSON.parse(answersString);
+      options = options.map(opt => opt.replace(/^"|"$/g, ''));
+
+    } catch (e) {
+      options = triviaItem.answers;
+    }
+
+    return {
+      ...triviaItem,
+      options,
+    };
+  }),
+}));
+
+    setModules(formattedModules);
+    } catch (error) {
+      console.error('Error fetching course/outline data:', error);
+    }
+  };
+
+  fetchCourseAndOutline();
+}, []);
+
   // Video Modal State
   const [isOpen, setOpen] = useState(false);
   const [videoId, setVideoId] = useState(null);
@@ -140,7 +196,7 @@ const Dashboard = () => {
       <aside className={styles.sidebar}>
         <h2 className={styles.userName}>{userProgress.name}</h2>
         <p className={styles.userEmail}>{userProgress.email}</p>
-        <h3 className={styles.courseTitle}>{userProgress.course}</h3>
+        <h3 className={styles.courseTitle}>{courseTitle || 'Loading course...'}</h3>
         <div className={styles.progressBar}>
           <div className={styles.progressFill} style={{ width: `${userProgress.progress}%` }}>
             {userProgress.progress}%
@@ -150,9 +206,9 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <div className={styles.dashboardContent}>
-        <h2 className={styles.dashboardTitle}>{userProgress.course}</h2>
+        <h2 className={styles.dashboardTitle}>{courseTitle || 'Loading course...'}</h2>
         <div className={styles.moduleGrid}>
-          {mockModules.map((module, index) => (
+          {modules.map((module, index) => (
             <div key={index} className={`${styles.moduleCard} ${module.completed ? styles.completed : ''}`}>
               <h3 className={styles.moduleTitle}>{module.title}</h3>
               <button className={styles.btnPrimary} onClick={() => handleOpenVideo(module.videoId)}>

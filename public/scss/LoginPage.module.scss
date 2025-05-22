@@ -172,4 +172,15 @@
             text-decoration: underline;
         }
     }
+}  
+.loginBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
+.errorMessage {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+  
+  
