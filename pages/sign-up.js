@@ -24,16 +24,16 @@ const SignupPage = () => {
         let courseId = null;
         switch (formData.courses) {
             case 'Afaan Oromo':
-                courseId = 1;
+                courseId = 5;
                 break;
             case 'Amharic':
-                courseId = 2;
-                break;
-            case 'Somali':
                 courseId = 3;
                 break;
-            case 'Tigrigna':
+            case 'Somali':
                 courseId = 4;
+                break;
+            case 'Tigrigna':
+                courseId = 6;
                 break;
             default:
                 break;
