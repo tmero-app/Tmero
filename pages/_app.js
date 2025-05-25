@@ -1,6 +1,6 @@
+import Head from 'next/head';
 import "swiper/css";
 import "swiper/css/navigation";
-
 import '../public/css/bootstrap.min.css';
 import '../public/css/style.css';
 import '../public/css/responsive.css';
@@ -29,6 +29,10 @@ function MyApp({ Component, pageProps }) {
 
     return (
         <>
+        <Head>
+        <link rel="icon" href="/images/favicon.png" />
+        <title>Tmero</title>
+      </Head>
             {!loading ? (
                 <Component {...pageProps} />
             ) : (

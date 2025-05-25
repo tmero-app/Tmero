@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import styles from './../public/scss/SignupPage.module.scss'; 
+import styles from './../public/scss/SignupPage.module.scss';
+import TermsModal from '../components/elements/TermsModal';
 
 const SignupPage = () => {
     const [formData, setFormData] = useState({
@@ -7,10 +8,13 @@ const SignupPage = () => {
         phoneNumber: '',
         email: '',
         password: '',
-        courses: '', 
+        courses: '',
         state: '',
         studentName: '',
     });
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -19,7 +23,7 @@ const SignupPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         // Map selected language to course ID
         let courseId = null;
         switch (formData.courses) {
@@ -38,37 +42,30 @@ const SignupPage = () => {
             default:
                 break;
         }
-    
+
         const updatedFormData = {
             ...formData,
             courses: [courseId],
         };
-    
+
         try {
             const response = await fetch('https://api.tmero.com/register', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updatedFormData),
             });
-    
+
             if (!response.ok) throw new Error('Registration failed');
-    
+
             const data = await response.json();
-    
-            // Store the token returned by backend
-            localStorage.setItem('registrationToken', data.data); 
+            localStorage.setItem('registrationToken', data.data);
             localStorage.setItem('signupData', JSON.stringify(updatedFormData));
-    
-            // Redirect to payment page
             window.location.href = '/payment';
         } catch (error) {
             console.error('Signup error:', error);
             alert('There was a problem signing up. Please try again.');
         }
     };
-    
 
     return (
         <div className={styles.signupPageWrapper}>
@@ -77,7 +74,7 @@ const SignupPage = () => {
                     {/* Title Column */}
                     <div className={styles.signupTitleColumn}>
                         <div className={styles.signupTitle}>
-                            <h2>Join Tmero<br /> Unlock a World of<br /> Language Learning for<br />Your Child!</h2>
+                            <h2>Join Tmero<br/> Unlock a World of<br/> Language Learning for<br/>Your Child!</h2>
                             <div className={styles.signupDescription}>
                                 Embark on an Exciting Journey of Discovery and Communication!
                             </div>
@@ -92,10 +89,10 @@ const SignupPage = () => {
                                     <input type="text" name="parentFullname" placeholder="Parent Full Name" required onChange={handleInputChange} />
                                 </div>
                                 <div className={styles.formGroup}>
-                                <input type="tel" name="phoneNumber" placeholder="Phone Number" pattern="^\+?[1-9]\d{1,14}$" title="Enter a valid international phone number (e.g., +14155552671)" required onChange={handleInputChange} />
+                                    <input type="tel" name="phoneNumber" placeholder="Phone Number" pattern="^\+?[1-9]\d{1,14}$" title="Enter a valid international phone number (e.g., +14155552671)" required onChange={handleInputChange} />
                                 </div>
                                 <div className={styles.formGroup}>
-                                <input type="email" name="email" placeholder="Email" title="Please enter a valid email address" required onChange={handleInputChange} />
+                                    <input type="email" name="email" placeholder="Email" title="Please enter a valid email address" required onChange={handleInputChange} />
                                 </div>
                                 <div className={styles.formGroup}>
                                     <input type="password" name="password" placeholder="Password" required onChange={handleInputChange} />
@@ -115,9 +112,34 @@ const SignupPage = () => {
                                 <div className={styles.formGroup}>
                                     <input type="text" name="studentName" placeholder="Student Name" required onChange={handleInputChange} />
                                 </div>
-                                <div className={styles.formGroup}>
-                                    <button className={styles.signupBtn} type="submit">Sign Up</button>
+
+                                {/* Terms and Conditions */}
+                                <div className={`${styles.formGroup} ${styles.termsContainer}`}>
+                                  <label htmlFor="terms">
+                                    By continuing, you confirm that you agree to the{' '}
+                                    <a
+                                      href="#"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        openModal();
+                                      }}
+                                      style={{
+                                        color: '#007bff',
+                                        textDecoration: 'underline',
+                                        cursor: 'pointer'
+                                      }}
+                                    >
+                                      Terms and Conditions
+                                    </a>
+                                  </label>
                                 </div>
+
+                                <div className={styles.formGroup}>
+                                    <button className={styles.signupBtn} type="submit">
+                                        Sign Up
+                                    </button>
+                                </div>
+
                                 <div className={styles.signupRedirect}>
                                     Already have an account? <a href="/log-in">Log in</a>
                                 </div>
@@ -126,6 +148,7 @@ const SignupPage = () => {
                     </div>
                 </div>
             </section>
+            <TermsModal isOpen={isModalOpen} onRequestClose={closeModal} />
         </div>
     );
 };
