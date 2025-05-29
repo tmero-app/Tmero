@@ -41,7 +41,7 @@ const Accordion = () => {
                     </div>
                     <div className={isActive.key == 2 ? "acc-content current" : "acc-content"}>
                         <div className="content">
-                            <div className="text">We offer courses in Somali, Amharic, Afaan Oromo, and Tigrigna. Each course is designed to make language learning engaging and culturally enriching for young learners.</div>
+                            <div className="text">We offer courses in Somali, Amharic, Afaan Oromo, Tigrigna and Swahili. Each course is designed to make language learning engaging and culturally enriching for young learners.</div>
                         </div>
                     </div>
                 </li>

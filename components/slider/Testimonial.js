@@ -29,6 +29,12 @@ const Testimonial = () => {
             title: "ኣብርሃም ኣሰፋ",
             lang: "Tigrigna",
             testimonial: "እዚ ኮርስ ኣብ ናታት ህጻናትይ ሓበሬታ ታሪካዊ እዩ። እዚኦም ኣብቲ ቋንቋ ምምሃር ብተመኻኸርቲ ምንባብ ዝኸድ እንተሃበሮም።"
+        },
+        {
+            img: "testi-thumb-2.jpg",
+            title: "Emmanuel Said",
+            lang: "Kiswahili",
+            testimonial: "Kozi hii imesaidia watoto wangu kuelewa Kiswahili vizuri zaidi. Sasa wanaweza kuzungumza kwa ufasaha na wanaelewa mizizi yao. Hii imenisaidia kurudisha tamaduni nyumbani kwangu."
         }
     ];
 

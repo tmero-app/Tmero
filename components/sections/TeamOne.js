@@ -25,6 +25,12 @@ const TeamOne = () => {
             title: "Mary Kesete",
             desig: "Tigrigna",
             university: "Washington State University"
+        },
+        {
+            img: "mauriane.png",
+            title: "Mauriane Banza",
+            desig: "Swahili",
+            university: "Washington State University"
         }        
     ];
     return (
@@ -37,7 +43,7 @@ const TeamOne = () => {
                     </div>
                     <div className="row">
                         {data.map((item, i) => (
-                            <div className="team-block col-xl-3 col-lg-6 col-md-6 col-sm-12 wow fadeInUp">
+                            <div className="team-block col-6 col-sm-4 col-md-3 col-lg-2-4 wow fadeInUp">
                                 <div className="inner-box">
                                     <div className="image-box">
                                         <figure className="image"><img src={`images/resource/${item.img}`} title="Tmero" /></figure>

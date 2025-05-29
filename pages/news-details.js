@@ -72,6 +72,23 @@ const POSTS = [
         }
       ],
       tags: ["Tigrigna"]
+    },
+    {
+      id: "blog-5",
+      title: "Swahili Testimonials: Reuniting Through Shared Words",
+      description: "Inspiring voices from families rediscovering love, identity, and unity through the Swahili language—powered by Tmero.",
+      videoUrl: "https://www.youtube.com/embed/cU8ZcWKuOHo",
+      comments: [
+        {
+          name: "Zawadi Mkwawa (Mama kutoka Texas)",
+          text: "Mtoto wangu alianza kuniambia “Nakupenda, Mama” kwa Kiswahili. Ilikuwa kama sauti ya moyoni mwangu ilirudi nyumbani."
+        },
+        {
+          name: "Daniel Omondi (Baba wa watoto wawili)",
+          text: "Tmero ilitufundisha zaidi ya maneno. Tulirudisha mawasiliano ya familia yetu—sasa tunacheka, tunahadithiana, na tunaungana kwa Kiswahili."
+        }
+      ],
+      tags: ["Swahili"]
     }
   ];
   

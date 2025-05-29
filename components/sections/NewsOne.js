@@ -26,6 +26,12 @@ const NewsOne = () => {
             img: "blog-4.webp",
             title: "Parenting in the U.S. vs. Back Home: Learning Through Culturally Aware Education.",
             comment: 10
+        },
+        {
+            id: "blog-5",
+            img: "blog-5.png",
+            title: "Rooted in two worlds: Strengthening family ties through cultural parenting.",
+            comment: 10
         }
     ];
     return (
@@ -38,7 +44,7 @@ const NewsOne = () => {
                     </div>
                     <div className="row">
                         {data.map((item, i) => (
-                            <div className="news-block col-lg-3 col-md-6 col-sm-12 wow fadeInUp">
+                            <div className="news-block custom-col-5 wow fadeInUp" key={item.id}>
                                 <div className="inner-box">
                                     <div className="image-box">
                                         <figure className="image"><Link href={{pathname: "/news-details", query: { id: item.id } }}><img src={`images/resource/${item.img}`} title="Tmero" /></Link></figure>

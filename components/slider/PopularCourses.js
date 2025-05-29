@@ -40,6 +40,14 @@ const PopularCourses = () => {
             lesson: 19,
             students: 16,
         },
+        {
+            img: "swahili-session.png",
+            title: "Learn Swahili Easily from Your Own Home",
+            oldPrice: 447,
+            newPrice: 397,
+            lesson: 19,
+            students: 16,
+        },
         //add more courses here
     ];
     

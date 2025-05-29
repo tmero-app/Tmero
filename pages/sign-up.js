@@ -39,6 +39,9 @@ const SignupPage = () => {
             case 'Tigrigna':
                 courseId = 6;
                 break;
+            case 'Swahili':
+                courseId = 7;
+                break;
             default:
                 break;
         }
@@ -104,6 +107,7 @@ const SignupPage = () => {
                                         <option value="Amharic">Amharic</option>
                                         <option value="Somali">Somali</option>
                                         <option value="Tigrigna">Tigrigna</option>
+                                        <option value="Swahili">Swahili</option>
                                     </select>
                                 </div>
                                 <div className={styles.formGroup}>

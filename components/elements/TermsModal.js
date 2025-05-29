@@ -96,10 +96,10 @@ const TermsModal = ({ isOpen, onRequestClose }) => {
         We use secure third-party processors like Stripe. No selling of personal info.</p>
 
         <p><strong>7. Data Deletion</strong><br/>
-        Parents can request deletion by emailing <a href="mailto:ask@tmero.com">ask@tmero.com</a>. Processed in 1–3 years.</p>
+        Parents can request deletion by emailing <a href="mailto:ananastech5@gmail.com">ananastech5@gmail.com</a>. Processed in 1–3 years.</p>
 
         <p><strong>8. Contact Us</strong><br/>
-        For concerns, contact <a href="mailto:ask@tmero.com">ask@tmero.com</a>.</p>
+        For concerns, contact <a href="mailto:ananastech5@gmail.com">ananastech5@gmail.com</a>.</p>
       </div>
     </Modal>
   );

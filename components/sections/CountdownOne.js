@@ -1,16 +1,19 @@
 import React from 'react';
 import CountDown from '../elements/CountDown';
 
-
-const eventData = {
-    title: 'Next Class Starts Soon',
-    subtitle: 'Get ready to learn',
-    dateString: '2025-06-01T00:00:00', 
-};
-
 const CountdownOne = () => {
-    const startDate = new Date(eventData.dateString);
-    const formattedDate = startDate.toLocaleDateString('en-US', {
+    // Get current date/time in US Eastern Time
+    const now = new Date();
+    const usTime = new Date(
+        now.toLocaleString("en-US", { timeZone: "America/New_York" })
+    );
+
+    // Set next midnight in US time
+    const nextMidnight = new Date(usTime);
+    nextMidnight.setHours(24, 0, 0, 0); // 24:00 today = 00:00 tomorrow
+
+    // Format for display
+    const formattedDate = nextMidnight.toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
@@ -26,9 +29,9 @@ const CountdownOne = () => {
             <div className="auto-container">
                 <div className="content-box">
                     <div className="sec-title light text-center">
-                        <span className="sub-title">{eventData.subtitle}</span>
-                        <h2>{eventData.title}</h2>
-                        <p 
+                        <span className="sub-title">Next Class Starts Soon</span>
+                        <h2>Time is ticking — reserve your place now</h2>
+                        {/* <p 
                             style={{ 
                                 fontSize: '0.9rem', 
                                 marginTop: '0.5rem', 
@@ -36,11 +39,11 @@ const CountdownOne = () => {
                             }}
                             className="formatted-date"
                         >
-                            Starting on: {formattedDate}
-                        </p>
+                            Resets daily at: {formattedDate}
+                        </p> */}
                     </div>
                     <div className="time-counter wow fadeInUp">
-                        <CountDown endDateTime={startDate} />
+                        <CountDown endDateTime={nextMidnight} />
                     </div>
                 </div>
             </div>

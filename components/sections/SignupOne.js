@@ -76,6 +76,7 @@ const SignupOne = () => {
                                                     <option value="Somali">Somali</option>
                                                     <option value="Tigrigna">Tigrigna</option>
                                                     <option value="Afaan Oromo">Afaan Oromo</option>
+                                                    <option value="Swahili">Swahili</option>
                                                 </select>
                                             </div>
                                             <div className="form-group">

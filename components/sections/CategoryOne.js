@@ -57,7 +57,7 @@ const CategoryOne = () => {
                                 <div className="icon-box">
                                     <i className="icon flaticon-pie-chart" />
                                 </div>
-                                <h6 className="title"><Link href="/page-course-details">Character <br />Building Class</Link></h6>
+                                <h6 className="title"><Link href="/page-course-details">Swahili</Link></h6>
                             </div>
                         </div>
                         {/* Category Block */}
