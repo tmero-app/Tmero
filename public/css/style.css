@@ -6386,6 +6386,19 @@ Section Title
 .news-block .read-more:hover i {
   color: var(--theme-color4);
 }
+.title {
+  display: inline;
+}
+.truncate-toggle {
+  background: none;
+  border: none;
+  color: #0070f3;
+  cursor: pointer;
+  font-size: 0.9em;
+  padding: 0;
+  margin-left: 0.3em;
+}
+
 @media (min-width: 992px) {
   .custom-col-5 {
     width: 20%;
