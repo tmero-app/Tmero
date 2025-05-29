@@ -2,17 +2,15 @@ import React from 'react';
 import CountDown from '../elements/CountDown';
 
 const CountdownOne = () => {
-    // Get current date/time in US Eastern Time
     const now = new Date();
     const usTime = new Date(
         now.toLocaleString("en-US", { timeZone: "America/New_York" })
     );
 
-    // Set next midnight in US time
+    
     const nextMidnight = new Date(usTime);
-    nextMidnight.setHours(24, 0, 0, 0); // 24:00 today = 00:00 tomorrow
+    nextMidnight.setHours(24, 0, 0, 0); 
 
-    // Format for display
     const formattedDate = nextMidnight.toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
