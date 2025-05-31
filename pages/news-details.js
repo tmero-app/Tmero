@@ -9,7 +9,7 @@ const POSTS = [
       id: "blog-1",
       title: "Amharic Testimonials: Reconnecting Through Language",
       description: "Heartfelt testimonials from families who rediscovered their bonds by speaking Amharic together—powered by Tmero.",
-      videoUrl: "https://www.youtube.com/embed/cU8ZcWKuOHo", 
+      videoUrl: "https://www.youtube.com/embed/ZyMZMv2S-hU", 
       comments: [
         { 
           name: "Alemu Desta (Father of 2)", 
