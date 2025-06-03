@@ -26,7 +26,7 @@ const POSTS = [
       id: "blog-2",
       title: "Afaan Oromo Testimonials: Healing Bonds Through Words",
       description: "Powerful stories from parents whose children revive family ties by speaking Afaan Oromo at home.",
-      videoUrl: "https://www.youtube.com/embed/cU8ZcWKuOHo", 
+      videoUrl: "https://www.youtube.com/embed/FOwQBzTMTbw", 
       comments: [
         {
           name: "Jemal Yusuf (Father of 3)",
@@ -43,7 +43,7 @@ const POSTS = [
       id: "blog-3",
       title: "Somali Testimonials: Speaking From the Heart",
       description: "Real-life accounts of Somali families healing and growing closer by reclaiming their mother tongue.",
-      videoUrl: "https://www.youtube.com/embed/cU8ZcWKuOHo", 
+      videoUrl: "https://www.youtube.com/embed/-NlUljT1xwQ", 
       comments: [
         {
           name: "Samiya Bashir (Mom from Minneapolis)",
@@ -60,7 +60,7 @@ const POSTS = [
       id: "blog-4",
       title: "Tigrigna Testimonials: Culture Alive at Home",
       description: "Uplifting stories of Tigrigna-speaking families who brought their heritage back to life with Tmero.",
-      videoUrl: "https://www.youtube.com/embed/cU8ZcWKuOHo", 
+      videoUrl: "https://www.youtube.com/embed/1ZRHspGP8ig", 
       comments: [
         {
           name: "Tigist Bekele (Proud Eritrean Mom)",
@@ -77,7 +77,7 @@ const POSTS = [
       id: "blog-5",
       title: "Swahili Testimonials: Reuniting Through Shared Words",
       description: "Inspiring voices from families rediscovering love, identity, and unity through the Swahili language—powered by Tmero.",
-      videoUrl: "https://www.youtube.com/embed/cU8ZcWKuOHo",
+      videoUrl: "https://www.youtube.com/embed/I5F4-n1UJbM",
       comments: [
         {
           name: "Zawadi Mkwawa (Mama kutoka Texas)",
