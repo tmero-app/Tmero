@@ -25,6 +25,12 @@ const TeamOne = () => {
             title: "Mary Kesete",
             desig: "Tigrigna",
             university: "Washington State University"
+        },
+        {
+            img: "mauriane.png",
+            title: "Mauriane Banza",
+            desig: "Swahili",
+            university: "Washington State University"
         }
     ];
     return (

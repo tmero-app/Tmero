@@ -1,22 +1,12 @@
 import React from 'react';
+import { DateTime } from 'luxon';
 import CountDown from '../elements/CountDown';
 
 const CountdownOne = () => {
-    const now = new Date();
-    const usTime = new Date(
-        now.toLocaleString("en-US", { timeZone: "America/New_York" })
-    );
-
-    
-    const nextMidnight = new Date(usTime);
-    nextMidnight.setHours(24, 0, 0, 0); 
-
-    const formattedDate = nextMidnight.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    });
+    const nowInNY = DateTime.now().setZone('America/New_York');
+    const nextMidnightInNY = nowInNY.plus({ days: 1 }).startOf('day');
+    const endDateTime = nextMidnightInNY.toJSDate();
+    const formattedDate = nextMidnightInNY.toFormat('cccc, LLLL d, yyyy');
 
     return (
         <section className="countdown-section">
@@ -41,7 +31,7 @@ const CountdownOne = () => {
                         </p> */}
                     </div>
                     <div className="time-counter wow fadeInUp">
-                        <CountDown endDateTime={nextMidnight} />
+                        <CountDown endDateTime={endDateTime} />
                     </div>
                 </div>
             </div>

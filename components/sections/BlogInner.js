@@ -26,7 +26,13 @@ const NewsOne = () => {
             img: "blog-4.webp",
             title: "Parenting in the U.S. vs. Back Home: Learning Through Culturally Aware Education.",
             comment: 10
-        }
+        },
+        {
+            id: 'blog-5',
+            img: 'blog-5.png',
+            title: 'Rooted in two worlds: Strengthening family ties through cultural parenting.',
+            comment: 10,
+          }
     ];
 
     return (
