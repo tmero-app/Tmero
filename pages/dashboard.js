@@ -1,289 +1,94 @@
-import React, { useEffect, useState } from 'react';
-import ModalVideo from 'react-modal-video';
-import styles from '../public/scss/Dashboard.module.scss';
+"use client";
 
+import React, { useEffect, useState } from "react";
+import { Topbar } from "../components/sections/Topbar";
+import LanguageLearningDashboard from "../components/sections/language-learning-dashboard";
+import styles from "../scss/dashboard.module.scss";
 
-const Dashboard = () => {
-
-  const [courseTitle, setCourseTitle] = useState('');
-  const [modules, setModules] = useState([]);
-
-
-  const [userProgress, setUserProgress] = useState({
-    name: '',
+export default function Dashboard() {
+  const [userData, setUserData] = useState({
+    parentName: '',
+    studentName: '',
     email: '',
-    course: '',
-    progress: 50, 
   });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchUserDetails = async () => {
-      const token = localStorage.getItem('token'); 
-      if (!token) return;
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError('No authentication token found');
+        setIsLoading(false);
+        window.location.href = '/log-in';
+        return;
+      }
 
       try {
-        const res = await fetch('https://api.tmero.com/user/me', {
+        const response = await fetch('https://api.tmero.com/user/me', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        const result = await res.json();
+        const result = await response.json();
 
-        if (res.ok && result.data) {
-          setUserProgress((prev) => ({
-            ...prev,
-            name: result.data.studentName || 'Unknown',
+        if (response.ok && result.data) {
+          setUserData({
+            parentName: result.data.parentFullname || 'Unknown',
+            studentName: result.data.studentName || 'Unknown',
             email: result.data.email || 'Unknown',
-          }));
+          });
         } else {
-          console.error('Failed to fetch user:', result.message);
+          setError(result.message || 'Failed to fetch user data');
+          if (response.status === 401) {
+            window.location.href = '/log-in';
+          }
         }
       } catch (err) {
+        setError('An error occurred while fetching user data');
         console.error('Error fetching user:', err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchUserDetails();
+    fetchUserData();
   }, []);
 
-  const extractYouTubeVideoId = (url) => {
-  const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|embed|watch)|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
-  const match = url.match(regex);
-  return match ? match[1] : null;
-};
+  if (isLoading) {
+    return (
+      <div className={styles.loadingContainer}>
+        <div className={styles.loadingSpinner}></div>
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
-
-  useEffect(() => {
-  const fetchCourseAndOutline = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) return;
-
-    try {
-      //Get course ID and title
-      const courseRes = await fetch('https://api.tmero.com/user/courses', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const courseData = await courseRes.json();
-
-      if (!courseRes.ok || !courseData?.data?.length) {
-        console.error('Failed to fetch courses');
-        return;
-      }
-
-      const course = courseData.data[0]; 
-      const courseId = course.id;
-      setCourseTitle(course.title); 
-
-      //Get outlines for that course
-      const outlineRes = await fetch(`https://api.tmero.com/user/courses/${courseId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const outlineData = await outlineRes.json();
-
-      if (!outlineRes.ok || !outlineData?.data?.length) {
-        console.error('Failed to fetch outlines');
-        return;
-      }
-
-      const outlines = outlineData.data[0].outlines;
-
-      //Map outlines to expected format
-    const formattedModules = outlines.map((outline, index) => ({
-  title: `Week ${index + 1}: ${outline.outline}`,
-  videoId: outline.youtubeUrl.split('v=')[1],
-  completed: false,
-  trivia: (outline.trivia || []).map(triviaItem => {
-    let options = [];
-
-    try {
-      let answersString = triviaItem.answers.join(',');
-      answersString = answersString.trim();
-      if (answersString.startsWith('[')) answersString = answersString.slice(1);
-      if (answersString.endsWith(']')) answersString = answersString.slice(0, -1);
-      answersString = `[${answersString}]`;
-      options = JSON.parse(answersString);
-      options = options.map(opt => opt.replace(/^"|"$/g, ''));
-
-    } catch (e) {
-      options = triviaItem.answers;
-    }
-
-    return {
-      ...triviaItem,
-      options,
-    };
-  }),
-}));
-
-    setModules(formattedModules);
-    } catch (error) {
-      console.error('Error fetching course/outline data:', error);
-    }
-  };
-
-  fetchCourseAndOutline();
-}, []);
-
-  // Video Modal State
-  const [isOpen, setOpen] = useState(false);
-  const [videoId, setVideoId] = useState(null);
-
-  // Trivia Modal States
-  const [triviaOpen, setTriviaOpen] = useState(false);
-  const [activeTriviaModule, setActiveTriviaModule] = useState(null);
-  const [currentTriviaQuestion, setCurrentTriviaQuestion] = useState(0);
-  const [selectedTriviaAnswer, setSelectedTriviaAnswer] = useState(null);
-  const [triviaFeedback, setTriviaFeedback] = useState('');
-  const [triviaScore, setTriviaScore] = useState(0);
-  const [isTriviaCompleted, setIsTriviaCompleted] = useState(false);
-
-  const handleOpenVideo = (id) => {
-    setVideoId(id);
-    setOpen(true);
-  };
-
-  const openTrivia = (module) => {
-    setActiveTriviaModule(module);
-    setTriviaOpen(true);
-    setCurrentTriviaQuestion(0);
-    setSelectedTriviaAnswer(null);
-    setTriviaFeedback('');
-    setTriviaScore(0);
-    setIsTriviaCompleted(false);
-  };
-
-  const closeTrivia = () => {
-    setTriviaOpen(false);
-    setActiveTriviaModule(null);
-    setCurrentTriviaQuestion(0);
-    setSelectedTriviaAnswer(null);
-    setTriviaFeedback('');
-    setTriviaScore(0);
-    setIsTriviaCompleted(false);
-  };
-
-  const handleTriviaAnswer = (option) => {
-    if (selectedTriviaAnswer !== null) return; // Prevent re-answering
-    setSelectedTriviaAnswer(option);
-    const currentQ = activeTriviaModule.trivia[currentTriviaQuestion];
-    if (option === currentQ.correctAnswer) {
-      setTriviaFeedback("✅ Correct!");
-      setTriviaScore((prev) => prev + 1);
-    } else {
-      setTriviaFeedback("❌ Incorrect.");
-    }
-  };
-
-  const nextTriviaQuestion = () => {
-    if (currentTriviaQuestion < activeTriviaModule.trivia.length - 1) {
-      setCurrentTriviaQuestion((prev) => prev + 1);
-      setSelectedTriviaAnswer(null);
-      setTriviaFeedback('');
-    } else {
-      // Set completed state so the modal shows the results.
-      setIsTriviaCompleted(true);
-    }
-  };
+  if (error && !userData.parentName) {
+    return (
+      <div className={styles.errorContainer}>
+        <p className={styles.errorMessage}>{error}</p>
+        <button 
+          onClick={() => window.location.href = '/log-in'} 
+          className={styles.loginButton}
+        >
+          Return to Login
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div className={styles.dashboardContainer}>
-      {/* Sidebar */}
-      <aside className={styles.sidebar}>
-        <h2 className={styles.userName}>{userProgress.name}</h2>
-        <p className={styles.userEmail}>{userProgress.email}</p>
-        <h3 className={styles.courseTitle}>{courseTitle || 'Loading course...'}</h3>
-        <div className={styles.progressBar}>
-          <div className={styles.progressFill} style={{ width: `${userProgress.progress}%` }}>
-            {userProgress.progress}%
-          </div>
+    <div className={styles.dashboardPage}>
+      <Topbar userName={userData.parentName} userEmail={userData.email} />
+      <main className={styles.mainContent}>
+        <div className={styles.welcomeHeader}>
+          <h1>Welcome, <span className={styles.studentName}>{userData.studentName}</span>! 👋</h1>
+          <p>Ready to continue your language learning journey?</p>
         </div>
-      </aside>
-
-      {/* Main Content */}
-      <div className={styles.dashboardContent}>
-        <h2 className={styles.dashboardTitle}>{courseTitle || 'Loading course...'}</h2>
-        <div className={styles.moduleGrid}>
-          {modules.map((module, index) => (
-            <div key={index} className={`${styles.moduleCard} ${module.completed ? styles.completed : ''}`}>
-              <h3 className={styles.moduleTitle}>{module.title}</h3>
-              <button className={styles.btnPrimary} onClick={() => handleOpenVideo(module.videoId)}>
-                {module.completed ? "Watch Again" : "Watch Video"}
-              </button>
-              {module.trivia && module.trivia.length > 0 && (
-                <button className={styles.btnQuiz} onClick={() => openTrivia(module)}>
-                  Take Quiz
-                </button>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Video Modal */}
-      <ModalVideo 
-        channel="youtube" 
-        autoplay 
-        isOpen={isOpen} 
-        videoId={videoId} 
-        onClose={() => setOpen(false)} 
-      />
-
-      {/* Trivia Modal */}
-      {triviaOpen && activeTriviaModule && (
-        <div className={styles.triviaModalOverlay}>
-          <div className={styles.triviaModalContent}>
-            <button className={styles.triviaCloseButton} onClick={closeTrivia}>X</button>
-            <h3>{activeTriviaModule.title} Trivia</h3>
-
-            {isTriviaCompleted ? (
-              <div className={styles.triviaQuestionSection}>
-                <p>Quiz Completed! Your score: {triviaScore} / {activeTriviaModule.trivia.length}</p>
-                <button className={styles.triviaNextButton} onClick={closeTrivia}>Close</button>
-              </div>
-            ) : (
-              activeTriviaModule.trivia.length > 0 && (
-                <div className={styles.triviaQuestionSection}>
-
-                  {/* Question Progress Indicator */}
-                  <p className={styles.triviaProgress}>
-                    Question {currentTriviaQuestion + 1} / {activeTriviaModule.trivia.length}
-                  </p>
-              
-                  <p>{activeTriviaModule.trivia[currentTriviaQuestion].question}</p>
-
-                  <div className={styles.triviaOptions}>
-                    {activeTriviaModule.trivia[currentTriviaQuestion].options.map((option, idx) => (
-                      <button 
-                        key={idx} 
-                        className={styles.triviaOptionButton} 
-                        onClick={() => handleTriviaAnswer(option)}
-                        disabled={selectedTriviaAnswer !== null}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                  
-                  {selectedTriviaAnswer && (
-                    <div className={styles.triviaFeedback}>
-                      <p>{triviaFeedback}</p>
-                      <button className={styles.triviaNextButton} onClick={nextTriviaQuestion}>Next</button>
-                    </div>
-                  )}
-                </div>
-              )
-            )}
-          </div>
-        </div>
-      )}
-
+        <LanguageLearningDashboard />
+      </main>
     </div>
   );
-};
-
-export default Dashboard;
+}

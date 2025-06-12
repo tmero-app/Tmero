@@ -44,62 +44,72 @@ const LoginPage = () => {
 
     return (
         <div className={styles.loginPageWrapper}>
+            <div className={styles.overlay}></div>
             <section className={styles.loginSectionCentered}>
-                <div className={styles.loginContainer}>
-                    {/* Title Column */}
-                    <div className={styles.loginTitleColumn}>
-                        <div className={styles.loginTitle}>
-                            <h2>Welcome Back to Tmero!</h2>
-                            <div className={styles.loginDescription}>
-                                Log in to continue your child's exciting language learning journey!
-                            </div>
-                        </div>
+                <div className={styles.formCard}>
+                    <div className={styles.welcomeHeader}>
+                        <h1 className={styles.welcomeTitle}>Welcome to Tmero!</h1>
+                        <p className={styles.welcomeText}>
+                            Start your exciting language learning journey
+                        </p>
                     </div>
 
-                    {/* Form Column */}
-                    <div className={styles.loginFormColumn}>
-                        <div className={styles.loginFormInner}>
-                            <form onSubmit={handleLogin} id="login-form">
-                                <div className={styles.formGroup}>
-                                    <input 
-                                        type="email" 
-                                        name="email" 
-                                        placeholder="Email" 
-                                        required 
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                    />
-                                </div>
-                                <div className={styles.formGroup}>
-                                    <input 
-                                        type="password" 
-                                        name="password" 
-                                        placeholder="Password" 
-                                        required 
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                    />
-                                </div>
-                                {error && (
-                                    <div className={styles.errorMessage}>
-                                        {error}
-                                    </div>
-                                )}
-                                <div className={styles.formGroup}>
-                                <button 
-                                    className={styles.loginBtn}
-                                    type="submit"
-                                    disabled={loading}
-                                >
-                                    Log In
-                                </button>
-                                </div>
-                                <div className={styles.signupRedirect}>
-                                    Don’t have an account? <a href="/sign-up">Sign up</a>
-                                </div>
-                            </form>
+                    <form onSubmit={handleLogin} className={styles.loginForm}>
+                        <div className={styles.formGroup}>
+                            <label htmlFor="email" className={styles.formLabel}>Email</label>
+                            <div className={styles.inputWrapper}>
+                                <input 
+                                    id="email"
+                                    type="email" 
+                                    name="email" 
+                                    placeholder="Enter your email" 
+                                    required 
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className={styles.formInput}
+                                />
+                            </div>
                         </div>
-                    </div>
+
+                        <div className={styles.formGroup}>
+                            <label htmlFor="password" className={styles.formLabel}>Password</label>
+                            <div className={styles.inputWrapper}>
+                                <input 
+                                    id="password"
+                                    type="password" 
+                                    name="password" 
+                                    placeholder="Enter your password" 
+                                    required 
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className={styles.formInput}
+                                />
+                            </div>
+                        </div>
+
+                        {error && (
+                            <div className={styles.errorMessage}>
+                                <span className={styles.errorIcon}>⚠️</span>
+                                {error}
+                            </div>
+                        )}
+
+                        <div className={styles.formActions}>
+                            <button 
+                                className={`${styles.loginBtn} ${loading ? styles.loading : ''}`}
+                                type="submit"
+                                disabled={loading}
+                            >
+                                {loading ? 'Logging in...' : 'Log In'}
+                            </button>
+                        </div>
+
+                        <div className={styles.formFooter}>
+                            <div className={styles.signupRedirect}>
+                                New to Tmero? <a href="/sign-up">Create an account</a>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </section>
         </div>

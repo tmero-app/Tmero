@@ -12,17 +12,118 @@ const SignupPage = () => {
         state: '',
         studentName: '',
     });
+    const [formErrors, setFormErrors] = useState({});
+    const [touchedFields, setTouchedFields] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+
+    const validateField = (name, value) => {
+        if (!value) return '';  // Don't show error for empty fields unless form is submitted
+        
+        switch (name) {
+            case 'parentFullname':
+            case 'studentName':
+                // Only letters, spaces, and hyphens allowed, at least 2 characters
+                if (!/^[A-Za-z\s-]{2,}$/.test(value)) {
+                    return 'Name should only contain letters, spaces, and hyphens';
+                }
+                break;
+            case 'phoneNumber':
+                // International phone number format
+                if (!/^\+?[1-9]\d{1,14}$/.test(value)) {
+                    return 'Please enter a valid phone number (e.g., +14155552671)';
+                }
+                break;
+            case 'email':
+                // Email validation
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                    return 'Please enter a valid email address';
+                }
+                break;
+            case 'password':
+                // Password validation commented out for now
+                /*if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(value)) {
+                    return 'Password must be at least 8 characters and contain uppercase, lowercase, and numbers';
+                }*/
+                break;
+            case 'state':
+                // Only letters and spaces, at least 2 characters
+                if (!/^[A-Za-z\s]{2,}$/.test(value)) {
+                    return 'State should only contain letters and spaces';
+                }
+                break;
+            case 'courses':
+                if (!value) {
+                    return 'Please select a language course';
+                }
+                break;
+            default:
+                return '';
+        }
+        return '';
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+        
+        // Only validate if field has been touched
+        if (touchedFields[name]) {
+            const error = validateField(name, value);
+            setFormErrors(prev => ({
+                ...prev,
+                [name]: error
+            }));
+        }
+    };
+
+    const handleBlur = (e) => {
+        const { name, value } = e.target;
+        setTouchedFields(prev => ({
+            ...prev,
+            [name]: true
+        }));
+        const error = validateField(name, value);
+        setFormErrors(prev => ({
+            ...prev,
+            [name]: error
+        }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // Mark all fields as touched
+        const allTouched = Object.keys(formData).reduce((acc, key) => ({
+            ...acc,
+            [key]: true
+        }), {});
+        setTouchedFields(allTouched);
+
+        // Validate all fields before submission
+        const errors = {};
+        Object.keys(formData).forEach(key => {
+            if (!formData[key]) {
+                errors[key] = 'This field is required';
+            } else {
+                const error = validateField(key, formData[key]);
+                if (error) {
+                    errors[key] = error;
+                }
+            }
+        });
+
+        if (Object.keys(errors).length > 0) {
+            setFormErrors(errors);
+            return;
+        }
+
+        setLoading(true);
+        setError('');
 
         // Map selected language to course ID
         let courseId = null;
@@ -58,7 +159,10 @@ const SignupPage = () => {
                 body: JSON.stringify(updatedFormData),
             });
 
-            if (!response.ok) throw new Error('Registration failed');
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message || 'Registration failed');
+            }
 
             const data = await response.json();
             localStorage.setItem('registrationToken', data.data);
@@ -66,22 +170,56 @@ const SignupPage = () => {
             window.location.href = '/payment';
         } catch (error) {
             console.error('Signup error:', error);
-            alert('There was a problem signing up. Please try again.');
+            setError(error.message || 'There was a problem signing up. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <div className={styles.signupPageWrapper}>
+            <div className={styles.overlay}></div>
             <section className={styles.signupSectionCentered}>
                 <div className={styles.signupContainer}>
                     {/* Title Column */}
                     <div className={styles.signupTitleColumn}>
                         <div className={styles.signupTitle}>
-                            <h2>Join Tmero<br/> Unlock a World of<br/> Language Learning for<br/>Your Child!</h2>
+                            <h2>Join Tmero Today</h2>
                             <div className={styles.signupDescription}>
-                                Embark on an Exciting Journey of Discovery and Communication!
+                                Unlock a world of language learning for your child with our interactive and engaging platform.
                             </div>
                         </div>
+
+                        <ul className={styles.featuresList}>
+                            <li>
+                                <div className={styles.featureIcon}>🎯</div>
+                                <div className={styles.featureText}>
+                                    <h3>Personalized Learning</h3>
+                                    <p>Live online classes with expert teachers, specially designed for children's learning needs</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div className={styles.featureIcon}>🌟</div>
+                                <div className={styles.featureText}>
+                                    <h3>Interactive Lessons</h3>
+                                    <p>Engaging activities and games that make learning fun and effective</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div className={styles.featureIcon}>📊</div>
+                                <div className={styles.featureText}>
+                                    <h3>Progress Tracking</h3>
+                                    <p>Monitor your child's achievements and learning journey</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div className={styles.featureIcon}>🌍</div>
+                                <div className={styles.featureText}>
+                                    <h3>Cultural Immersion</h3>
+                                    <p>Learn language through cultural context and real-world scenarios</p>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
 
                     {/* Form Column */}
@@ -89,60 +227,139 @@ const SignupPage = () => {
                         <div className={styles.signupFormInner}>
                             <form onSubmit={handleSubmit}>
                                 <div className={styles.formGroup}>
-                                    <input type="text" name="parentFullname" placeholder="Parent Full Name" required onChange={handleInputChange} />
+                                    <input 
+                                        type="text" 
+                                        name="parentFullname" 
+                                        placeholder="Parent Full Name" 
+                                        required 
+                                        onChange={handleInputChange}
+                                        onBlur={handleBlur}
+                                        className={touchedFields.parentFullname && formErrors.parentFullname ? styles.error : ''}
+                                    />
+                                    {touchedFields.parentFullname && formErrors.parentFullname && (
+                                        <div className={styles.fieldError}>{formErrors.parentFullname}</div>
+                                    )}
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <input type="tel" name="phoneNumber" placeholder="Phone Number" pattern="^\+?[1-9]\d{1,14}$" title="Enter a valid international phone number (e.g., +14155552671)" required onChange={handleInputChange} />
+                                    <input 
+                                        type="tel" 
+                                        name="phoneNumber" 
+                                        placeholder="Phone Number" 
+                                        required 
+                                        onChange={handleInputChange}
+                                        onBlur={handleBlur}
+                                        className={touchedFields.phoneNumber && formErrors.phoneNumber ? styles.error : ''}
+                                    />
+                                    {touchedFields.phoneNumber && formErrors.phoneNumber && (
+                                        <div className={styles.fieldError}>{formErrors.phoneNumber}</div>
+                                    )}
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <input type="email" name="email" placeholder="Email" title="Please enter a valid email address" required onChange={handleInputChange} />
+                                    <input 
+                                        type="email" 
+                                        name="email" 
+                                        placeholder="Email" 
+                                        required 
+                                        onChange={handleInputChange}
+                                        onBlur={handleBlur}
+                                        className={touchedFields.email && formErrors.email ? styles.error : ''}
+                                    />
+                                    {touchedFields.email && formErrors.email && (
+                                        <div className={styles.fieldError}>{formErrors.email}</div>
+                                    )}
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <input type="password" name="password" placeholder="Password" required onChange={handleInputChange} />
+                                    <input 
+                                        type="password" 
+                                        name="password" 
+                                        placeholder="Password" 
+                                        required 
+                                        onChange={handleInputChange}
+                                        onBlur={handleBlur}
+                                        className={touchedFields.password && formErrors.password ? styles.error : ''}
+                                    />
+                                    {touchedFields.password && formErrors.password && (
+                                        <div className={styles.fieldError}>{formErrors.password}</div>
+                                    )}
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <select name="courses" required onChange={handleInputChange}>
-                                        <option value="">Select Language</option>
+                                    <select 
+                                        name="courses" 
+                                        required 
+                                        onChange={handleInputChange}
+                                        onBlur={handleBlur}
+                                        defaultValue=""
+                                        className={touchedFields.courses && formErrors.courses ? styles.error : ''}
+                                    >
+                                        <option value="" disabled>Select Language</option>
                                         <option value="Afaan Oromo">Afaan Oromo</option>
                                         <option value="Amharic">Amharic</option>
                                         <option value="Somali">Somali</option>
                                         <option value="Tigrigna">Tigrigna</option>
                                         <option value="Swahili">Swahili</option>
                                     </select>
+                                    {touchedFields.courses && formErrors.courses && (
+                                        <div className={styles.fieldError}>{formErrors.courses}</div>
+                                    )}
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <input type="text" name="state" placeholder="State" required onChange={handleInputChange} />
+                                    <input 
+                                        type="text" 
+                                        name="state" 
+                                        placeholder="State" 
+                                        required 
+                                        onChange={handleInputChange}
+                                        onBlur={handleBlur}
+                                        className={touchedFields.state && formErrors.state ? styles.error : ''}
+                                    />
+                                    {touchedFields.state && formErrors.state && (
+                                        <div className={styles.fieldError}>{formErrors.state}</div>
+                                    )}
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <input type="text" name="studentName" placeholder="Student Name" required onChange={handleInputChange} />
+                                    <input 
+                                        type="text" 
+                                        name="studentName" 
+                                        placeholder="Student Name" 
+                                        required 
+                                        onChange={handleInputChange}
+                                        onBlur={handleBlur}
+                                        className={touchedFields.studentName && formErrors.studentName ? styles.error : ''}
+                                    />
+                                    {touchedFields.studentName && formErrors.studentName && (
+                                        <div className={styles.fieldError}>{formErrors.studentName}</div>
+                                    )}
                                 </div>
 
-                                {/* Terms and Conditions */}
-                                <div className={`${styles.formGroup} ${styles.termsContainer}`}>
-                                  <label htmlFor="terms">
-                                    By continuing, you confirm that you agree to the{' '}
-                                    <a
-                                      href="#"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        openModal();
-                                      }}
-                                      style={{
-                                        color: '#007bff',
-                                        textDecoration: 'underline',
-                                        cursor: 'pointer'
-                                      }}
-                                    >
-                                      Terms and Conditions
-                                    </a>
-                                  </label>
+                                {error && (
+                                    <div className={styles.errorMessage}>
+                                        <span className={styles.errorIcon}>⚠️</span>
+                                        {error}
+                                    </div>
+                                )}
+
+                                <div className={styles.termsContainer}>
+                                    <label>
+                                        By continuing, you confirm that you agree to the{' '}
+                                        <a
+                                            href="#"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                openModal();
+                                            }}
+                                        >
+                                            Terms and Conditions
+                                        </a>
+                                    </label>
                                 </div>
 
-                                <div className={styles.formGroup}>
-                                    <button className={styles.signupBtn} type="submit">
-                                        Sign Up
-                                    </button>
-                                </div>
+                                <button 
+                                    className={`${styles.signupBtn} ${loading ? styles.loading : ''}`}
+                                    type="submit"
+                                    disabled={loading}
+                                >
+                                    {loading ? 'Creating Account...' : 'Sign Up'}
+                                </button>
 
                                 <div className={styles.signupRedirect}>
                                     Already have an account? <a href="/log-in">Log in</a>
