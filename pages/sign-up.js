@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './../public/scss/SignupPage.module.scss';
 import TermsModal from '../components/elements/TermsModal';
 
@@ -17,12 +17,21 @@ const SignupPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    // Mobile detection hook
+    const [isMobile, setIsMobile] = useState(false);
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth <= 600);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     const validateField = (name, value) => {
-        if (!value) return '';  // Don't show error for empty fields unless form is submitted
+        if (!value) return '';  
         
         switch (name) {
             case 'parentFullname':
@@ -45,13 +54,13 @@ const SignupPage = () => {
                 }
                 break;
             case 'password':
-                // Password validation commented out for now
+                // Password validation
                 /*if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(value)) {
                     return 'Password must be at least 8 characters and contain uppercase, lowercase, and numbers';
                 }*/
                 break;
             case 'state':
-                // Only letters and spaces, at least 2 characters
+                // only letters and spaces, at least 2 characters
                 if (!/^[A-Za-z\s]{2,}$/.test(value)) {
                     return 'State should only contain letters and spaces';
                 }
@@ -71,7 +80,7 @@ const SignupPage = () => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
         
-        // Only validate if field has been touched
+        // only validate if field has been touched
         if (touchedFields[name]) {
             const error = validateField(name, value);
             setFormErrors(prev => ({
@@ -97,14 +106,14 @@ const SignupPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // Mark all fields as touched
+        // mark all fields as touched
         const allTouched = Object.keys(formData).reduce((acc, key) => ({
             ...acc,
             [key]: true
         }), {});
         setTouchedFields(allTouched);
 
-        // Validate all fields before submission
+        // validate all fields before submission
         const errors = {};
         Object.keys(formData).forEach(key => {
             if (!formData[key]) {
@@ -125,7 +134,7 @@ const SignupPage = () => {
         setLoading(true);
         setError('');
 
-        // Map selected language to course ID
+        // map selected language to course ID
         let courseId = null;
         switch (formData.courses) {
             case 'Afaan Oromo':
@@ -186,7 +195,10 @@ const SignupPage = () => {
                         <div className={styles.signupTitle}>
                             <h2>Join Tmero Today</h2>
                             <div className={styles.signupDescription}>
-                                Unlock a world of language learning for your child with our interactive and engaging platform.
+                                {isMobile
+                                    ? 'Unlock language learning for your child.'
+                                    : 'Unlock a world of language learning for your child with our interactive and engaging platform.'
+                                }
                             </div>
                         </div>
 
@@ -195,28 +207,28 @@ const SignupPage = () => {
                                 <div className={styles.featureIcon}>🎯</div>
                                 <div className={styles.featureText}>
                                     <h3>Personalized Learning</h3>
-                                    <p>Live online classes with expert teachers, specially designed for children's learning needs</p>
+                                    <p>{isMobile ? "Live online classes for kids" : "Live online classes with expert teachers, specially designed for children's learning needs"}</p>
                                 </div>
                             </li>
                             <li>
                                 <div className={styles.featureIcon}>🌟</div>
                                 <div className={styles.featureText}>
                                     <h3>Interactive Lessons</h3>
-                                    <p>Engaging activities and games that make learning fun and effective</p>
+                                    <p>{isMobile ? "Fun, interactive lessons" : "Engaging activities and games that make learning fun and effective"}</p>
                                 </div>
                             </li>
                             <li>
                                 <div className={styles.featureIcon}>📊</div>
                                 <div className={styles.featureText}>
                                     <h3>Progress Tracking</h3>
-                                    <p>Monitor your child's achievements and learning journey</p>
+                                    <p>{isMobile ? "Track your child's progress" : "Monitor your child's achievements and learning journey"}</p>
                                 </div>
                             </li>
                             <li>
                                 <div className={styles.featureIcon}>🌍</div>
                                 <div className={styles.featureText}>
                                     <h3>Cultural Immersion</h3>
-                                    <p>Learn language through cultural context and real-world scenarios</p>
+                                    <p>{isMobile ? "Learn with real-world context" : "Learn language through cultural context and real-world scenarios"}</p>
                                 </div>
                             </li>
                         </ul>
