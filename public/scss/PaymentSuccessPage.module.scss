@@ -1,14 +1,37 @@
 .paymentSuccessWrapper {
     min-height: 100vh;
+    min-width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url('../images/background/3.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        min-width: 110vw;
+        min-height: 110vh;
+        background-image: url('../images/background/3.jpg');
+        background-size: cover;
+        background-position: center;
+        transform: translate(-50%, -50%) scale(1.1);
+        z-index: -2;
+        animation: slowZoom 20s infinite alternate ease-in-out;
+    }
 }
 
+@keyframes slowZoom {
+    0% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+}
 
 .paymentSuccessSectionCentered {
     width: 100%;
