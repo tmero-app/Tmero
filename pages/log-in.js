@@ -6,7 +6,9 @@ const LoginPage = () => {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleLogin = async (e) => {
@@ -34,7 +36,10 @@ const LoginPage = () => {
                 localStorage.setItem('token', data.data);
             }
 
-            router.push('/dashboard');
+            setSuccess('Login successful! Redirecting...');
+            setTimeout(() => {
+                router.push('/dashboard');
+            }, 1500);
         } catch (err) {
             setError('Something went wrong. Please try again.');
         } finally {
@@ -76,7 +81,7 @@ const LoginPage = () => {
                             <div className={styles.inputWrapper}>
                                 <input 
                                     id="password"
-                                    type="password" 
+                                    type={showPassword ? "text" : "password"} 
                                     name="password" 
                                     placeholder="Enter your password" 
                                     required 
@@ -84,6 +89,9 @@ const LoginPage = () => {
                                     onChange={(e) => setPassword(e.target.value)}
                                     className={styles.formInput}
                                 />
+                                <span className={styles.passwordToggle} onClick={() => setShowPassword(!showPassword)}>
+                                    <i className={showPassword ? 'far fa-eye-slash' : 'far fa-eye'}></i>
+                                </span>
                             </div>
                         </div>
 
@@ -91,6 +99,13 @@ const LoginPage = () => {
                             <div className={styles.errorMessage}>
                                 <span className={styles.errorIcon}>⚠️</span>
                                 {error}
+                            </div>
+                        )}
+
+                        {success && (
+                            <div className={styles.successMessage}>
+                                <span className={styles.successIcon}>✓</span>
+                                {success}
                             </div>
                         )}
 

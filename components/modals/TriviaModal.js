@@ -17,8 +17,9 @@ export default function TriviaModal({ isOpen, onClose, questions, title }) {
     if (answered) return;
     setSelectedAnswer(answer);
     setAnswered(true);
-
-    if (answer === questions[currentQuestion].correctAnswer) {
+    const sanitizedAnswer = sanitizeText(answer);
+    const sanitizedCorrect = sanitizeText(questions[currentQuestion].correctAnswer);
+    if (sanitizedAnswer === sanitizedCorrect) {
       setScore(score + 1);
     }
   };
@@ -41,15 +42,18 @@ export default function TriviaModal({ isOpen, onClose, questions, title }) {
     setAnswered(false);
   };
 
-  const getAnswerClassName = (answer) => {
+  const getAnswerClassName = (answer, correct, isSelected) => {
     if (!answered) return '';
-    if (answer === questions[currentQuestion].correctAnswer) {
-      return styles.correct;
-    }
-    if (answer === selectedAnswer) {
-      return styles.incorrect;
-    }
+    if (answer === correct) return styles.correct;
+    if (isSelected && answer !== correct) return styles.incorrect;
     return '';
+  };
+
+  // Utility to sanitize question/answers
+  const sanitizeText = (text) => {
+    if (!text) return '';
+    // Remove all leading/trailing quotes, brackets, and whitespace
+    return text.replace(/^[\s\["']+|[\s\]"']+$/g, '');
   };
 
   return (
@@ -69,7 +73,8 @@ export default function TriviaModal({ isOpen, onClose, questions, title }) {
             </div>
 
             <div className={styles.question}>
-              <h2>{questions[currentQuestion].question}</h2>
+              <h2>{sanitizeText(questions[currentQuestion].question)}</h2>
+              {/*
               {questions[currentQuestion].imageUrl && (
                 <img 
                   src={questions[currentQuestion].imageUrl} 
@@ -77,25 +82,38 @@ export default function TriviaModal({ isOpen, onClose, questions, title }) {
                   className={styles.questionImage}
                 />
               )}
+              */}
             </div>
 
             <div className={styles.answers}>
-              {questions[currentQuestion].answers.map((answer, index) => (
-                <button
-                  key={index}
-                  className={`${styles.answerButton} ${getAnswerClassName(answer)}`}
-                  onClick={() => handleAnswerSelect(answer)}
-                  disabled={answered}
-                >
-                  {answer}
-                  {answered && answer === questions[currentQuestion].correctAnswer && (
-                    <CheckCircle size={20} className={styles.icon} />
-                  )}
-                  {answered && answer === selectedAnswer && answer !== questions[currentQuestion].correctAnswer && (
-                    <XCircle size={20} className={styles.icon} />
-                  )}
-                </button>
-              ))}
+              {questions[currentQuestion].answers.map((answer, index) => {
+                const sanitizedAnswer = sanitizeText(answer);
+                const sanitizedCorrect = sanitizeText(questions[currentQuestion].correctAnswer);
+                const isSelected = sanitizedAnswer === sanitizeText(selectedAnswer);
+                const isCorrect = sanitizedAnswer === sanitizedCorrect;
+                // Highlight correct answer if answered and either selected or missed
+                const highlightCorrect = answered && isCorrect;
+                // Highlight incorrect if selected and not correct
+                const highlightIncorrect = answered && isSelected && !isCorrect;
+                return (
+                  <button
+                    key={index}
+                    className={
+                      `${styles.answerButton} ` +
+                      (highlightCorrect ? styles.correct : '') +
+                      (highlightIncorrect ? ' ' + styles.incorrect : '')
+                    }
+                    onClick={() => handleAnswerSelect(answer)}
+                    disabled={answered}
+                  >
+                    {sanitizedAnswer}
+                    {/* Show tick for correct answer (selected or not) */}
+                    {highlightCorrect && (
+                      <CheckCircle size={20} className={styles.icon} />
+                    )}
+                  </button>
+                );
+              })}
             </div>
 
             {answered && (

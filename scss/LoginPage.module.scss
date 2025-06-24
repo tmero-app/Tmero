@@ -1,0 +1,30 @@
+.formInput {
+    // Styling for form inputs
+}
+
+.inputWrapper {
+    position: relative;
+    width: 100%;
+
+    .formInput {
+        padding-right: 40px; 
+    }
+}
+
+.passwordToggle {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #888; 
+    z-index: 2;
+
+    &:hover {
+        color: #333; 
+    }
+}
+
+.formActions {
+    // Styling for form actions
+} 

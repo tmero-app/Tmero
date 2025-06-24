@@ -176,7 +176,7 @@ $box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
         
         .formInput {
             width: 100%;
-            padding: 12px 16px;
+            padding: 12px 40px 12px 16px;
             border: 2px solid rgba(44, 62, 80, 0.1);
             border-radius: $border-radius;
             font-size: 16px;
@@ -198,6 +198,21 @@ $box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
                 color: #BDC3C7;
             }
         }
+
+        .passwordToggle {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #95a5a6;
+            transition: color 0.2s ease;
+            z-index: 3;
+
+            &:hover {
+                color: #2c3e50;
+            }
+        }
     }
 }
 
@@ -216,6 +231,24 @@ $box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     
     .errorIcon {
         font-size: 16px;
+    }
+}
+
+.successMessage {
+    background: rgba(46, 204, 113, 0.1);
+    color: #2ECC71;
+    padding: 12px 16px;
+    border-radius: $border-radius;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    animation: fadeIn 0.5s ease-out;
+
+    .successIcon {
+        font-size: 16px;
+        font-weight: bold;
     }
 }
 
