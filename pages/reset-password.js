@@ -2,44 +2,46 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import styles from './../public/scss/LoginPage.module.scss';
 
-const LoginPage = () => {
+const ResetPasswordPage = () => {
     const router = useRouter();
-    const [email, setEmail] = useState('');
+    const { token } = router.query;
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const handleLogin = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setSuccess('');
+        if (!password || !confirmPassword) {
+            setError('Please fill in both fields.');
+            return;
+        }
+        if (password !== confirmPassword) {
+            setError('Passwords do not match.');
+            return;
+        }
+        if (!token) {
+            setError('Invalid or missing token.');
+            return;
+        }
         setLoading(true);
-
         try {
-            const response = await fetch('https://api.tmero.com/login', {
+            const response = await fetch('https://api.tmero.com/reset-password', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token, newPassword: password }),
             });
-
             const data = await response.json();
-
             if (!response.ok) {
-                setError(data.message || 'Login failed');
+                setError(data.message || 'Something went wrong.');
                 return;
             }
-
-            if (data.data) {
-                localStorage.setItem('token', data.data);
-            }
-
-            setSuccess('Login successful! Redirecting...');
-            setTimeout(() => {
-                router.push('/dashboard');
-            }, 1500);
+            setSuccess('Password reset successful! You can now log in.');
         } catch (err) {
             setError('Something went wrong. Please try again.');
         } finally {
@@ -53,38 +55,21 @@ const LoginPage = () => {
             <section className={styles.loginSectionCentered}>
                 <div className={styles.formCard}>
                     <div className={styles.welcomeHeader}>
-                        <h1 className={styles.welcomeTitle}>Welcome to Tmero!</h1>
+                        <h1 className={styles.welcomeTitle}>Reset Password</h1>
                         <p className={styles.welcomeText}>
-                            Start your exciting language learning journey
+                            Enter your new password below.
                         </p>
                     </div>
-
-                    <form onSubmit={handleLogin} className={styles.loginForm}>
+                    <form onSubmit={handleSubmit} className={styles.loginForm}>
                         <div className={styles.formGroup}>
-                            <label htmlFor="email" className={styles.formLabel}>Email</label>
+                            <label htmlFor="password" className={styles.formLabel}>New Password</label>
                             <div className={styles.inputWrapper}>
-                                <input 
-                                    id="email"
-                                    type="email" 
-                                    name="email" 
-                                    placeholder="Enter your email" 
-                                    required 
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    className={styles.formInput}
-                                />
-                            </div>
-                        </div>
-
-                        <div className={styles.formGroup}>
-                            <label htmlFor="password" className={styles.formLabel}>Password</label>
-                            <div className={styles.inputWrapper}>
-                                <input 
+                                <input
                                     id="password"
-                                    type={showPassword ? "text" : "password"} 
-                                    name="password" 
-                                    placeholder="Enter your password" 
-                                    required 
+                                    type={showPassword ? 'text' : 'password'}
+                                    name="password"
+                                    placeholder="Enter new password"
+                                    required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     className={styles.formInput}
@@ -94,39 +79,44 @@ const LoginPage = () => {
                                 </span>
                             </div>
                         </div>
-
-                        <div className={styles.forgotPasswordWrapper}>
-                            <a href="/forgot-password" className={styles.forgotPasswordLink}>Forgot password?</a>
+                        <div className={styles.formGroup}>
+                            <label htmlFor="confirmPassword" className={styles.formLabel}>Confirm Password</label>
+                            <div className={styles.inputWrapper}>
+                                <input
+                                    id="confirmPassword"
+                                    type={showConfirm ? 'text' : 'password'}
+                                    name="confirmPassword"
+                                    placeholder="Confirm new password"
+                                    required
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    className={styles.formInput}
+                                />
+                                <span className={styles.passwordToggle} onClick={() => setShowConfirm(!showConfirm)}>
+                                    <i className={showConfirm ? 'far fa-eye-slash' : 'far fa-eye'}></i>
+                                </span>
+                            </div>
                         </div>
-
                         {error && (
                             <div className={styles.errorMessage}>
                                 <span className={styles.errorIcon}>⚠️</span>
                                 {error}
                             </div>
                         )}
-
                         {success && (
                             <div className={styles.successMessage}>
                                 <span className={styles.successIcon}>✓</span>
                                 {success}
                             </div>
                         )}
-
                         <div className={styles.formActions}>
-                            <button 
-                                className={`${styles.loginBtn} ${loading ? styles.loading : ''}`}
+                            <button
+                                className={styles.loginBtn}
                                 type="submit"
                                 disabled={loading}
                             >
-                                {loading ? 'Logging in...' : 'Log In'}
+                                {loading ? 'Resetting...' : 'Reset Password'}
                             </button>
-                        </div>
-
-                        <div className={styles.formFooter}>
-                            <div className={styles.signupRedirect}>
-                                New to Tmero? <a href="/sign-up">Create an account</a>
-                            </div>
                         </div>
                     </form>
                 </div>
@@ -135,4 +125,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default ResetPasswordPage;

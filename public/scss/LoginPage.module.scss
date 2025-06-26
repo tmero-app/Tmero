@@ -344,5 +344,39 @@ $box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
         }
     }
 }
+
+.forgotCardOverride {
+    max-width: 340px !important;
+    padding: 32px !important;
+}
+
+.forgotPasswordLink {
+    display: inline-block;
+    margin: 0 0 12px 0;
+    color: #7F8C8D;
+    font-size: 15px;
+    text-decoration: none;
+    transition: color 0.2s;
+    &:hover {
+        color: #2C3E50;
+        text-decoration: underline;
+    }
+}
+
+.forgotPasswordBackLink {
+    display: inline-block;
+    margin-top: 8px;
+    color: #7F8C8D;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    text-decoration: none;
+    transition: color 0.2s;
+    letter-spacing: 0.01em;
+    &:hover {
+        color: #2C3E50;
+        text-decoration: underline;
+    }
+}
   
   
