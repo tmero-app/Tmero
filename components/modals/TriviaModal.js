@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { X, CheckCircle, XCircle, ArrowRight, Trophy } from 'lucide-react';
 import styles from '../../scss/TriviaModal.module.scss';
 
@@ -11,6 +11,19 @@ export default function TriviaModal({ isOpen, onClose, questions, title, onCompl
   const [score, setScore] = useState(0);
   const [answered, setAnswered] = useState(false);
   const [preloadedImages, setPreloadedImages] = useState({});
+  const modalContentRef = useRef(null);
+
+  // Clear cache and reset state when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      setPreloadedImages({});
+      setCurrentQuestion(0);
+      setSelectedAnswer(null);
+      setShowResult(false);
+      setScore(0);
+      setAnswered(false);
+    }
+  }, [isOpen]);
 
   // preload images when modal opens or questions change
   useEffect(() => {
@@ -42,6 +55,18 @@ export default function TriviaModal({ isOpen, onClose, questions, title, onCompl
     });
     return () => { isCancelled = true; };
   }, [isOpen, questions]);
+
+  // auto-scroll modal content to top on question change or modal open
+  useEffect(() => {
+    if (isOpen && modalContentRef.current) {
+      // set timeout to ensure scroll happens after DOM update
+      setTimeout(() => {
+        if (modalContentRef.current) {
+          modalContentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }, 0);
+    }
+  }, [currentQuestion, isOpen]);
 
   if (!isOpen) return null;
 
@@ -112,7 +137,7 @@ export default function TriviaModal({ isOpen, onClose, questions, title, onCompl
         </div>
 
         {!showResult ? (
-          <div className={styles.triviaContent}>
+          <div className={styles.triviaContent} ref={modalContentRef}>
             <div className={styles.progress}>
               Question {currentQuestion + 1} of {questions.length}
             </div>
