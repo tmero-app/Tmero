@@ -1,15 +1,47 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, CheckCircle, XCircle, ArrowRight, Trophy } from 'lucide-react';
 import styles from '../../scss/TriviaModal.module.scss';
 
-export default function TriviaModal({ isOpen, onClose, questions, title }) {
+export default function TriviaModal({ isOpen, onClose, questions, title, onComplete }) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showResult, setShowResult] = useState(false);
   const [score, setScore] = useState(0);
   const [answered, setAnswered] = useState(false);
+  const [preloadedImages, setPreloadedImages] = useState({});
+
+  // preload images when modal opens or questions change
+  useEffect(() => {
+    if (!isOpen || !questions || questions.length === 0) return;
+    const imageCache = {};
+    let isCancelled = false;
+    const promises = questions.map((q, idx) => {
+      if (q.imageUrl) {
+        return new Promise((resolve) => {
+          const img = new window.Image();
+          const url = `https://api.tmero.com/static/images/${q.imageUrl}`;
+          img.onload = () => {
+            imageCache[idx] = url;
+            resolve();
+          };
+          img.onerror = () => {
+            imageCache[idx] = null;
+            resolve();
+          };
+          img.src = url;
+        });
+      } else {
+        imageCache[idx] = null;
+        return Promise.resolve();
+      }
+    });
+    Promise.all(promises).then(() => {
+      if (!isCancelled) setPreloadedImages(imageCache);
+    });
+    return () => { isCancelled = true; };
+  }, [isOpen, questions]);
 
   if (!isOpen) return null;
 
@@ -31,6 +63,7 @@ export default function TriviaModal({ isOpen, onClose, questions, title }) {
       setAnswered(false);
     } else {
       setShowResult(true);
+      if (onComplete) onComplete();
     }
   };
 
@@ -49,11 +82,23 @@ export default function TriviaModal({ isOpen, onClose, questions, title }) {
     return '';
   };
 
-  // Utility to sanitize question/answers
+  // utility to sanitize question/answers
   const sanitizeText = (text) => {
     if (!text) return '';
-    // Remove all leading/trailing quotes, brackets, and whitespace
-    return text.replace(/^[\s\["']+|[\s\]"']+$/g, '');
+    // remove all leading/trailing quotes, brackets, and whitespace
+    let sanitized = text.replace(/^[\s\["']+|[\s\]"']+$/g, '');
+    
+    // decode Unicode escape sequences for Amharic characters
+    sanitized = decodeUnicodeEscapes(sanitized);
+    
+    return sanitized;
+  };
+
+  // function to decode Unicode escape sequences
+  const decodeUnicodeEscapes = (text) => {
+    return text.replace(/\\u([0-9a-fA-F]{4})/g, (match, hex) => {
+      return String.fromCharCode(parseInt(hex, 16));
+    });
   };
 
   return (
@@ -74,15 +119,14 @@ export default function TriviaModal({ isOpen, onClose, questions, title }) {
 
             <div className={styles.question}>
               <h2>{sanitizeText(questions[currentQuestion].question)}</h2>
-              {/*
               {questions[currentQuestion].imageUrl && (
                 <img 
-                  src={questions[currentQuestion].imageUrl} 
+                  key={currentQuestion}
+                  src={preloadedImages[currentQuestion] || `https://api.tmero.com/static/images/${questions[currentQuestion].imageUrl}`}
                   alt="Question illustration"
-                  className={styles.questionImage}
+                  className={`${styles.questionImage} ${styles.fadeIn}`}
                 />
               )}
-              */}
             </div>
 
             <div className={styles.answers}>
@@ -91,9 +135,9 @@ export default function TriviaModal({ isOpen, onClose, questions, title }) {
                 const sanitizedCorrect = sanitizeText(questions[currentQuestion].correctAnswer);
                 const isSelected = sanitizedAnswer === sanitizeText(selectedAnswer);
                 const isCorrect = sanitizedAnswer === sanitizedCorrect;
-                // Highlight correct answer if answered and either selected or missed
+                // highlight correct answer if answered and either selected or missed
                 const highlightCorrect = answered && isCorrect;
-                // Highlight incorrect if selected and not correct
+                // highlight incorrect if selected and not correct
                 const highlightIncorrect = answered && isSelected && !isCorrect;
                 return (
                   <button
@@ -107,7 +151,7 @@ export default function TriviaModal({ isOpen, onClose, questions, title }) {
                     disabled={answered}
                   >
                     {sanitizedAnswer}
-                    {/* Show tick for correct answer (selected or not) */}
+                    {/* show tick for correct answer (selected or not) */}
                     {highlightCorrect && (
                       <CheckCircle size={20} className={styles.icon} />
                     )}

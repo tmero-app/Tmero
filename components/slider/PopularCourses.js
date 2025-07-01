@@ -1,57 +1,68 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import SwiperCore, { Autoplay, Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-
 SwiperCore.use([Autoplay, Navigation]);
+
 const PopularCourses = () => {
+    const [courses, setCourses] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const data = [
-        {
-            img: "somali-session.webp",
-            title: "Learn Somali Easily from Your Own Home",
-            oldPrice: 447,
-            newPrice: 397,
-            lesson: 19,
-            students: 16,
-        },
-        {
-            img: "amharic-session.webp",
-            title: "Learn Amharic Easily from Your Own Home",
-            oldPrice: 447,
-            newPrice: 397,
-            lesson: 19,
-            students: 16,
-        },
-        {
-            img: "afaan-oromo-session.webp",
-            title: "Learn Afaan Oromo Easily from Your Own Home",
-            oldPrice: 447,
-            newPrice: 397,
-            lesson: 19,
-            students: 16,
-        },
-        {
-            img: "tigrigna-session.webp",
-            title: "Learn Tigrigna Easily from Your Own Home",
-            oldPrice: 447,
-            newPrice: 397,
-            lesson: 19,
-            students: 16,
-        },
-        {
-            img: "swahili-session.png",
-            title: "Learn Swahili Easily from Your Own Home",
-            oldPrice: 447,
-            newPrice: 397,
-            lesson: 19,
-            students: 16,
-        },
-        //add more courses here
-    ];
-    
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const response = await fetch('https://api.tmero.com/course');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch courses');
+                }
+                const result = await response.json();
+                
+                const transformedCourses = result.data.map(course => ({
+                    id: course.id,
+                    img: `https://api.tmero.com/static/images/${course.imageUrl}`,
+                    title: course.description,
+                    newPrice: parseFloat(course.price),
+                    oldPrice: parseFloat(course.price) + 50, // new price calculation
+                    lesson: 19, 
+                }));
+                
+                setCourses(transformedCourses);
+            } catch (err) {
+                console.error('Error fetching courses:', err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
 
+        fetchCourses();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="courses-section">
+                <div className="auto-container">
+                    <div className="text-center">
+                        <p>Loading courses...</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="courses-section">
+                <div className="auto-container">
+                    <div className="text-center">
+                        <p>Error loading courses: {error}</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -95,14 +106,14 @@ const PopularCourses = () => {
                 }}
                 className=""
             >
-                {data.map((item, i) => (
-                    <SwiperSlide>
+                {courses.map((item, i) => (
+                    <SwiperSlide key={item.id}>
                         <div className="course-block">
                             <div className="inner-box">
                                 <div className="image-box">
                                     <figure className="image">
                                         <Link href="/page-course-details">
-                                            <img src={`/images/resource/${item.img}`} title="Tmero" />
+                                            <img src={item.img} title="Tmero" alt={item.title} />
                                         </Link>
                                     </figure>
                                     <span className="price" style={{ position: 'absolute', right: '0', top: '20px', height: 'auto', minWidth: '80px', background: 'var(--bg-theme-color5)', color: '#ffffff', fontSize: '14px', textAlign: 'center', borderRadius: '20px 0 0 20px', padding: '4px 8px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
@@ -117,7 +128,6 @@ const PopularCourses = () => {
                                 <div className="content-box">
                                     <ul className="course-info">
                                         <li><i className="fa fa-book" /> {item.lesson} Lessons</li>
-                                        <li><i className="fa fa-users" /> Students</li>
                                     </ul>
                                     <h5 className="title"><Link href="/page-course-details">{item.title}</Link></h5>
                                     <div className="other-info">
@@ -134,15 +144,14 @@ const PopularCourses = () => {
                 ))}
             </Swiper>
 
-            <div class="owl-nav">
-                <div class="owl-prev owl-prev-course-1">
-                    <span class="fa fa-long-arrow-alt-left"></span>
+            <div className="owl-nav">
+                <div className="owl-prev owl-prev-course-1">
+                    <span className="fa fa-long-arrow-alt-left"></span>
                 </div>
-                <div class="owl-next owl-next-course-1">
-                    <span class="fa fa-long-arrow-alt-right"></span>
+                <div className="owl-next owl-next-course-1">
+                    <span className="fa fa-long-arrow-alt-right"></span>
                 </div>
             </div>
-
         </>
     );
 };

@@ -30,12 +30,16 @@ const getDifficultyClass = (difficulty) => {
 
 const getLanguageClass = (language) => {
   switch (language) {
-    case 'Spanish':
-      return styles.badgeSpanish;
-    case 'French':
-      return styles.badgeFrench;
-    case 'German':
-      return styles.badgeGerman;
+    case 'Somali':
+      return styles.badgeSomali;
+    case 'Amharic':
+      return styles.badgeAmharic;
+    case 'Afaan Oromo':
+      return styles.badgeAfaanOromo;
+    case 'Tigrigna':
+      return styles.badgeTigrigna;
+    case 'Swahili':
+      return styles.badgeSwahili;
     default:
       return styles.badgeMixed;
   }
@@ -43,10 +47,11 @@ const getLanguageClass = (language) => {
 
 export default function LanguageLearningDashboard() {
   const [videoModal, setVideoModal] = useState({ isOpen: false, url: '', title: '' });
-  const [triviaModal, setTriviaModal] = useState({ isOpen: false, questions: [], title: '' });
+  const [triviaModal, setTriviaModal] = useState({ isOpen: false, questions: [], title: '', outlineId: null });
   const [courseTitle, setCourseTitle] = useState('Loading...');
   const [courseWeeks, setCourseWeeks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [progress, setProgress] = useState({}); // { [outlineId]: true/false }
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -85,6 +90,35 @@ export default function LanguageLearningDashboard() {
 
         const outlines = outlineData.data[0].outlines;
 
+        
+        let progressObj = {};
+        try {
+          const res = await fetch('https://api.tmero.com/courseprogress', {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            }
+          });
+          const data = await res.json();
+          console.log('GET /courseprogress response', data);
+          if (res.ok && data.data) {
+            if (Array.isArray(data.data)) {
+              data.data.forEach(item => {
+                if (item && (item.seen === 1 || item.seen === true)) {
+                  progressObj[item.id] = true;
+                }
+              });
+            } else if (typeof data.data === 'object') {
+              if (data.data.seen === 1 || data.data.seen === true) {
+                progressObj[data.data.id] = true;
+              }
+            }
+          }
+        } catch (err) {
+          console.error('Error fetching progress', err);
+        }
+
         const formattedWeeks = outlines.map((outline) => ({
           week: outline.order,
           title: outline.outline,
@@ -96,7 +130,7 @@ export default function LanguageLearningDashboard() {
             duration: '25 min',
             difficulty: outline.order <= 10 ? 'Beginner' : 
                        outline.order <= 14 ? 'Intermediate' : 'Advanced',
-            completed: false,
+            completed: progressObj[outline.id] || false,
             language: course.title,
             hasVideo: true,
             hasWorksheet: true,
@@ -105,6 +139,7 @@ export default function LanguageLearningDashboard() {
           }]
         }));
 
+        setProgress(progressObj);
         setCourseWeeks(formattedWeeks);
       } catch (err) {
         console.error('Error fetching course data:', err);
@@ -115,6 +150,34 @@ export default function LanguageLearningDashboard() {
 
     fetchCourseData();
   }, []);
+
+  const markOutlineComplete = async (outlineId) => {
+    console.log('markOutlineComplete called with outlineId:', outlineId);
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const res = await fetch('https://api.tmero.com/courseprogress', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: Number(outlineId), status: true }),
+      });
+      console.log('POST /courseprogress for outline', outlineId, 'status:', res.status);
+      const data = await res.json();
+      console.log('POST /courseprogress response for outline', outlineId, data);
+      setProgress((prev) => ({ ...prev, [outlineId]: true }));
+      setCourseWeeks((prevWeeks) => prevWeeks.map(week => ({
+        ...week,
+        tasks: week.tasks.map(task =>
+          task.id === outlineId ? { ...task, completed: true } : task
+        )
+      })));
+    } catch (err) {
+      console.error('Failed to mark progress:', err);
+    }
+  };
 
   const handleWatchLesson = (taskId, taskTitle) => {
     const task = courseWeeks
@@ -129,15 +192,18 @@ export default function LanguageLearningDashboard() {
   };
 
   const handleTakeTrivia = (taskId, taskTitle) => {
+    console.log('handleTakeTrivia called for taskId:', taskId, 'taskTitle:', taskTitle);
     const task = courseWeeks
       .flatMap(week => week.tasks)
       .find(task => task.id === taskId);
 
     if (task && task.trivia && task.trivia.length > 0) {
+      console.log('Opening trivia modal for outlineId:', task.id);
       setTriviaModal({ 
         isOpen: true, 
         questions: task.trivia,
-        title: `${taskTitle} - Trivia Quiz`
+        title: `${taskTitle} - Trivia Quiz`,
+        outlineId: task.id
       });
     } else {
       //if no trivia questions are available yet
@@ -176,7 +242,7 @@ const handleDownloadPDF = (taskId, taskTitle) => {
       pdfUrl = 'https://www.dropbox.com/scl/fo/49xjj6szlxbyq5go7pqrm/AB_9q-ovNIQIIENKI2xP0tU?rlkey=79ohy605tk60ct8ufrequgkuj&st=3uaxi4i6&dl=0';
       break;
     default:
-      alert('No worksheet is available for this course yet.');
+      alert('No resource is available for this course yet.');
       return;
   }
 
@@ -316,9 +382,13 @@ const handleDownloadPDF = (taskId, taskTitle) => {
 
       <TriviaModal 
         isOpen={triviaModal.isOpen}
-        onClose={() => setTriviaModal({ isOpen: false, questions: [], title: '' })}
+        onClose={() => setTriviaModal({ isOpen: false, questions: [], title: '', outlineId: null })}
         questions={triviaModal.questions}
         title={triviaModal.title}
+        onComplete={() => {
+          console.log('TriviaModal onComplete triggered for outlineId:', triviaModal.outlineId);
+          if (triviaModal.outlineId) markOutlineComplete(triviaModal.outlineId);
+        }}
       />
     </div>
   );

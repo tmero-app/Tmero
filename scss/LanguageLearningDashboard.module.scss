@@ -198,7 +198,6 @@
     border-color: rgba(34, 197, 94, 0.2);
 
     .taskTitle {
-      text-decoration: line-through;
       color: #64748b;
     }
   }
@@ -259,25 +258,39 @@
 }
 
 // Language badges with enhanced colors and effects
-.badgeSpanish {
+.badgeSomali {
   @extend .badge;
   background: linear-gradient(135deg, #fee2e2, #fecaca);
   color: #991b1b;
   border: 1px solid rgba(153, 27, 27, 0.1);
 }
 
-.badgeFrench {
+.badgeAmharic {
   @extend .badge;
   background: linear-gradient(135deg, #ddd6fe, #c4b5fd);
   color: #5b21b6;
   border: 1px solid rgba(91, 33, 182, 0.1);
 }
 
-.badgeGerman {
+.badgeAfaanOromo {
   @extend .badge;
   background: linear-gradient(135deg, #bae6fd, #7dd3fc);
   color: #0369a1;
   border: 1px solid rgba(3, 105, 161, 0.1);
+}
+
+.badgeTigrigna {
+  @extend .badge;
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  color: #166534;
+  border: 1px solid rgba(22, 101, 52, 0.1);
+}
+
+.badgeSwahili {
+  @extend .badge;
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #92400e;
+  border: 1px solid rgba(146, 64, 14, 0.1);
 }
 
 .badgeMixed {

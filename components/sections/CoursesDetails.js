@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 import Accordion from '../elements/Accordion';
+import styles from '../../scss/RegisterCTA.module.scss';
 
 
 const Courseone = ({ alternate }) => {
@@ -14,14 +15,14 @@ const Courseone = ({ alternate }) => {
 							<div className="courses-details__content" style={{ textAlign: 'center' }}>
 
 								<img src="images/resource/course-overview.webp" alt="" style={{ margin: '0 auto', display: 'block' }} />
+								{/* Call to Action and Register Button */}
+								<div style={{ margin: '32px 0 40px 0', textAlign: 'center' }}>
+									<div style={{ fontWeight: 500, fontSize: 24, marginBottom: 12 }}>Ready to get started? Click below to register!</div>
+									<Link href="/sign-up" className={styles.registerCtaBtn}><span className="btn-title">Register Now</span></Link>
+								</div>
 								<h2 className="mt-4">Course Overview</h2>
 								<p>At TMERO.com, we believe in nurturing confident and well-rounded learners through the power of language. Our courses are thoughtfully designed for young minds to explore languages like Afaan Oromo, Somali, Tigrigna, Amharic, and Swahili through fun and engaging lessons.</p>
 								<p>In addition to building language proficiency, students will cultivate essential qualities such as curiosity, resilience, and cultural awareness. With our unique approach, your child will not only learn to communicate effectively but also develop the skills and mindset needed to thrive with self-confidence.</p>
-								{/* Call to Action and Register Button */}
-								<div style={{ margin: '32px 0 40px 0', textAlign: 'center' }}>
-									<div style={{ fontWeight: 500, fontSize: 18, marginBottom: 12 }}>Ready to get started? Click below to register!</div>
-									<Link href="/sign-up" className="theme-btn btn-style-one"><span className="btn-title">Register Now</span></Link>
-								</div>
 								<div className="content mt-40">
 									<div className="text">
 										<h3>What You Will Learn?</h3>
