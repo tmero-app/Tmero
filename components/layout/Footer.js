@@ -20,7 +20,7 @@ const Footer = () => {
                                         <li><a href="https://www.facebook.com/profile.php?id=61570942204502" target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook" /></a></li>
                                         <li><a href="https://www.instagram.com/tmeroedu/" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram" /></a></li>
                                         <li><a href="https://wa.me/+12067596659" target="_blank" rel="noopener noreferrer"><i className="fab fa-whatsapp" /></a></li>
-                                        <li><a href="https://www.tiktok.com/@tmero.com" target="_blank" rel="noopener noreferrer"><img src="/images/icons/tiktok.svg" style={{ width: '19px', height: '19px'}} /></a></li>
+                                        <li><a href="https://www.tiktok.com/@tmeroed?_t=ZP-8xiK0Y1r1nL&_r=1" target="_blank" rel="noopener noreferrer"><img src="/images/icons/tiktok.svg" style={{ width: '19px', height: '19px'}} /></a></li>
                                         <li><a href="https://t.me/tmeroedu" target="_blank" rel="noopener noreferrer"><i className="fab fa-telegram" /></a></li>
                                     </ul>
                                 </div>

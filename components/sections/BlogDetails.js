@@ -79,7 +79,7 @@ const BlogOne = ({ blogData }) => {
                                         <i className="fab fa-whatsapp" />
                                       </a>
                                       <a
-                                        href="https://www.tiktok.com/@tmero.com"
+                                        href="https://www.tiktok.com/@tmeroed?_t=ZP-8xiK0Y1r1nL&_r=1"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                       >
