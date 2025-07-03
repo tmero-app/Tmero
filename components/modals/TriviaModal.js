@@ -11,9 +11,50 @@ export default function TriviaModal({ isOpen, onClose, questions, title, onCompl
   const [score, setScore] = useState(0);
   const [answered, setAnswered] = useState(false);
   const [preloadedImages, setPreloadedImages] = useState({});
+  const [imageLoaded, setImageLoaded] = useState({});
+  const [randomizedAnswers, setRandomizedAnswers] = useState([]);
+  const [resultMessage, setResultMessage] = useState('');
   const modalContentRef = useRef(null);
 
-  // Clear cache and reset state when modal closes
+  // supportive, child-friendly messages by score
+  const lowScoreMessages = [
+    "Great effort! Every mistake helps you learn. Try again and you'll get even better! 🌱",
+    "Don't give up! Keep practicing and you'll see big improvements! 💪",
+    "You're on your way! Each quiz makes you smarter. Let's keep going! 🚀",
+    "Mistakes are part of learning. Try again and you'll do even better! 🌟",
+    "Keep trying! Every attempt helps you grow. You can do it! ⭐",
+    "Awesome effort! Next time you'll get even more right! 👍",
+    "Remember, practice makes perfect. Let's try again! 🧠",
+    "You're learning so much! Keep up the good work! 📚",
+    "Every quiz is a step forward. Well done for trying! 👣",
+    "Don't worry about mistakes—you're getting better every time! 😊"
+  ];
+  const mediumScoreMessages = [
+    "Nice work! You're getting the hang of it! 🎉",
+    "Good job! Just a little more practice and you'll ace it! 🌟",
+    "You're so close to a perfect score! Keep going! 🚀",
+    "Great progress! You're learning fast! 📈",
+    "Awesome! Just a few more and you'll be a quiz master! 🏅",
+    "You're doing really well! Keep practicing! 💡",
+    "Impressive! You're almost there! 👏",
+    "So close! Try again for a perfect score! 🏆",
+    "You're making great progress. Keep it up! 😃",
+    "Fantastic effort! You're on your way to the top! 🎈"
+  ];
+  const highScoreMessages = [
+    "Amazing! You got almost everything right! 🌟",
+    "Outstanding! You're a language champion! 🏆",
+    "Perfect score! You're a superstar! 🎉",
+    "Incredible! You really know your stuff! 👏",
+    "Wow! You aced the quiz! 🥇",
+    "Brilliant! You're a quiz master! 🧠",
+    "Fantastic! You got them all right! 🚀",
+    "Superb! You're a language whiz! 🏅",
+    "Excellent! You should be proud of yourself! 🙌",
+    "Unstoppable! You nailed it! 🥳"
+  ];
+
+  // clear cache and reset state when modal closes
   useEffect(() => {
     if (!isOpen) {
       setPreloadedImages({});
@@ -22,6 +63,7 @@ export default function TriviaModal({ isOpen, onClose, questions, title, onCompl
       setShowResult(false);
       setScore(0);
       setAnswered(false);
+      setImageLoaded({});
     }
   }, [isOpen]);
 
@@ -59,7 +101,6 @@ export default function TriviaModal({ isOpen, onClose, questions, title, onCompl
   // auto-scroll modal content to top on question change or modal open
   useEffect(() => {
     if (isOpen && modalContentRef.current) {
-      // set timeout to ensure scroll happens after DOM update
       setTimeout(() => {
         if (modalContentRef.current) {
           modalContentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
@@ -67,6 +108,54 @@ export default function TriviaModal({ isOpen, onClose, questions, title, onCompl
       }, 0);
     }
   }, [currentQuestion, isOpen]);
+
+  // Keyboard support: Enter advances to next question if answered
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (answered && (e.key === 'Enter' || e.key === 'NumpadEnter')) {
+        handleNext();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [answered, isOpen, showResult]);
+
+  // Randomize answers for each question when modal opens or questions change
+  useEffect(() => {
+    if (!isOpen || !questions || questions.length === 0) return;
+    // Fisher-Yates shuffle
+    const shuffle = (arr) => {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    };
+    const randomized = questions.map(q => shuffle(q.answers));
+    setRandomizedAnswers(randomized);
+  }, [isOpen, questions]);
+
+  // Pick a random message based on score when showing results
+  useEffect(() => {
+    if (showResult) {
+      let messageArr;
+      if (questions.length === 0) {
+        messageArr = lowScoreMessages;
+      } else {
+        const percent = score / questions.length;
+        if (percent < 0.6) {
+          messageArr = lowScoreMessages;
+        } else if (percent < 0.9) {
+          messageArr = mediumScoreMessages;
+        } else {
+          messageArr = highScoreMessages;
+        }
+      }
+      setResultMessage(messageArr[Math.floor(Math.random() * messageArr.length)]);
+    }
+  }, [showResult, score, questions.length]);
 
   if (!isOpen) return null;
 
@@ -110,12 +199,12 @@ export default function TriviaModal({ isOpen, onClose, questions, title, onCompl
   // utility to sanitize question/answers
   const sanitizeText = (text) => {
     if (!text) return '';
-    // remove all leading/trailing quotes, brackets, and whitespace
-    let sanitized = text.replace(/^[\s\["']+|[\s\]"']+$/g, '');
-    
+    // remove all leading/trailing quotes, brackets, slashes, and whitespace
+    let sanitized = text.replace(/^[\s\["'\\/]+|[\s\]"'\\/]+$/g, '');
+    // Replace escaped quotes with real quotes
+    sanitized = sanitized.replace(/\\"/g, '"').replace(/\\'/g, "'");
     // decode Unicode escape sequences for Amharic characters
     sanitized = decodeUnicodeEscapes(sanitized);
-    
     return sanitized;
   };
 
@@ -127,7 +216,7 @@ export default function TriviaModal({ isOpen, onClose, questions, title, onCompl
   };
 
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
+    <div className={styles.modalOverlay}>
       <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
         <div className={styles.modalHeader}>
           <h3>{title}</h3>
@@ -145,17 +234,30 @@ export default function TriviaModal({ isOpen, onClose, questions, title, onCompl
             <div className={styles.question}>
               <h2>{sanitizeText(questions[currentQuestion].question)}</h2>
               {questions[currentQuestion].imageUrl && (
-                <img 
-                  key={currentQuestion}
-                  src={preloadedImages[currentQuestion] || `https://api.tmero.com/static/images/${questions[currentQuestion].imageUrl}`}
-                  alt="Question illustration"
-                  className={`${styles.questionImage} ${styles.fadeIn}`}
-                />
+                <div style={{ minHeight: 180, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <img
+                    key={currentQuestion}
+                    src={preloadedImages[currentQuestion] || `https://api.tmero.com/static/images/${questions[currentQuestion].imageUrl}`}
+                    alt="Question illustration"
+                    className={`${styles.questionImage} ${styles.fadeIn}`}
+                    style={{ display: imageLoaded[currentQuestion] ? 'block' : 'none' }}
+                    onLoad={() => setImageLoaded((prev) => ({ ...prev, [currentQuestion]: true }))}
+                  />
+                  {!imageLoaded[currentQuestion] && (
+                    <div style={{ width: 60, height: 60, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="18" stroke="#8b5cf6" strokeWidth="4" strokeDasharray="90 60" strokeLinecap="round">
+                          <animateTransform attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="1s" repeatCount="indefinite" />
+                        </circle>
+                      </svg>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
 
             <div className={styles.answers}>
-              {questions[currentQuestion].answers.map((answer, index) => {
+              {(randomizedAnswers[currentQuestion] || questions[currentQuestion].answers).map((answer, index) => {
                 const sanitizedAnswer = sanitizeText(answer);
                 const sanitizedCorrect = sanitizeText(questions[currentQuestion].correctAnswer);
                 const isSelected = sanitizedAnswer === sanitizeText(selectedAnswer);
@@ -206,6 +308,9 @@ export default function TriviaModal({ isOpen, onClose, questions, title, onCompl
           </div>
         ) : (
           <div className={styles.results}>
+            <div style={{ fontSize: '1.25rem', fontWeight: 600, color: '#8b5cf6', marginBottom: '1rem' }}>
+              {resultMessage}
+            </div>
             <Trophy size={64} className={styles.trophyIcon} />
             <h2>Quiz Complete!</h2>
             <p className={styles.score}>

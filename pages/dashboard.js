@@ -5,6 +5,19 @@ import { Topbar } from "../components/sections/Topbar";
 import LanguageLearningDashboard from "../components/sections/language-learning-dashboard";
 import styles from "../scss/dashboard.module.scss";
 
+const positiveMessages = [
+  "Keep up the great work! Every day you learn something new! 🚀",
+  "You're doing amazing! Let's see what you can discover today! 🧠",
+  "Learning a language is an adventure let's keep going! 🌟",
+  "Every lesson makes you smarter. Ready for today's challenge? 💡",
+  "You're a language explorer! Let's find new words together! 🗺️",
+  "Practice makes perfect! Let's keep learning and having fun! 🎈",
+  "Your hard work is paying off! Let's keep the momentum! 🏅",
+  "Great to see you back! Ready for more language fun? 😃",
+  "Let's make today another step forward in your language journey! 👣",
+  "You're a superstar learner! Let's shine today! ⭐"
+];
+
 export default function Dashboard() {
   const [userData, setUserData] = useState({
     parentName: '',
@@ -13,6 +26,7 @@ export default function Dashboard() {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [subtitle, setSubtitle] = useState('');
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -56,6 +70,11 @@ export default function Dashboard() {
     fetchUserData();
   }, []);
 
+  // dynamic subtitle logic
+  useEffect(() => {
+    setSubtitle(positiveMessages[Math.floor(Math.random() * positiveMessages.length)]);
+  }, []);
+
   if (isLoading) {
     return (
       <div className={styles.loadingContainer}>
@@ -85,7 +104,7 @@ export default function Dashboard() {
       <main className={styles.mainContent}>
         <div className={styles.welcomeHeader}>
           <h1>Welcome, <span className={styles.studentName}>{userData.studentName}</span>! 👋</h1>
-          <p>Ready to continue your language learning journey?</p>
+          <p>{subtitle}</p>
         </div>
         <LanguageLearningDashboard />
       </main>

@@ -8,7 +8,7 @@ const SignupPage = () => {
         phoneNumber: '',
         email: '',
         password: '',
-        courses: '',
+        courseId: '',
         state: '',
         studentName: '',
     });
@@ -17,6 +17,9 @@ const SignupPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [courses, setCourses] = useState([]);
+    const [coursesLoading, setCoursesLoading] = useState(true);
+    const [coursesError, setCoursesError] = useState('');
     // Mobile detection hook
     const [isMobile, setIsMobile] = useState(false);
 
@@ -30,34 +33,63 @@ const SignupPage = () => {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
+    // fetch courses from api
+    useEffect(() => {
+        const fetchCourses = async () => {
+            setCoursesLoading(true);
+            setCoursesError('');
+            try {
+                const response = await fetch('https://api.tmero.com/course');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch courses');
+                }
+                const result = await response.json();
+                setCourses(result.data);
+            } catch (err) {
+                setCoursesError('Could not load language options. Please refresh.');
+            } finally {
+                setCoursesLoading(false);
+            }
+        };
+        fetchCourses();
+    }, []);
+
     const validateField = (name, value) => {
         if (!value) return '';  
         
         switch (name) {
             case 'parentFullname':
             case 'studentName':
-                // Only letters, spaces, and hyphens allowed, at least 2 characters
+                // only letters, spaces, and hyphens allowed, at least 2 characters
                 if (!/^[A-Za-z\s-]{2,}$/.test(value)) {
                     return 'Name should only contain letters, spaces, and hyphens';
                 }
                 break;
-            case 'phoneNumber':
-                // International phone number format
-                if (!/^\+?[1-9]\d{1,14}$/.test(value)) {
-                    return 'Please enter a valid phone number (e.g., +14155552671)';
+            case 'phoneNumber': {
+                // remove all non-digit characters except leading +
+                let cleaned = value.replace(/[^\d+]/g, '');
+                // remove all non-digits for digit count
+                let digits = value.replace(/\D/g, '');
+                if (digits.length < 9) {
+                    return 'Phone number must have at least 9 digits';
+                }
+                // must start with +, 0, or digit (for country code)
+                if (!/^([+]?\d{1,3})?0?\d{8,}$/.test(cleaned)) {
+                    return 'Please enter a valid phone number (e.g., +251912345678, 0967455481)';
                 }
                 break;
+            }
             case 'email':
-                // Email validation
+                // email validation
                 if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
                     return 'Please enter a valid email address';
                 }
                 break;
             case 'password':
-                // Password validation
-                /*if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(value)) {
-                    return 'Password must be at least 8 characters and contain uppercase, lowercase, and numbers';
-                }*/
+                // password must be at least 8 characters
+                if (value.length < 8) {
+                    return 'Password must be at least 8 characters long';
+                }
                 break;
             case 'state':
                 // only letters and spaces, at least 2 characters
@@ -65,7 +97,7 @@ const SignupPage = () => {
                     return 'State should only contain letters and spaces';
                 }
                 break;
-            case 'courses':
+            case 'courseId':
                 if (!value) {
                     return 'Please select a language course';
                 }
@@ -134,32 +166,11 @@ const SignupPage = () => {
         setLoading(true);
         setError('');
 
-        // map selected language to course ID
-        let courseId = null;
-        switch (formData.courses) {
-            case 'Afaan Oromo':
-                courseId = 5;
-                break;
-            case 'Amharic':
-                courseId = 3;
-                break;
-            case 'Somali':
-                courseId = 4;
-                break;
-            case 'Tigrigna':
-                courseId = 6;
-                break;
-            case 'Swahili':
-                courseId = 7;
-                break;
-            default:
-                break;
-        }
-
         const updatedFormData = {
             ...formData,
-            courses: [courseId],
+            courses: [Number(formData.courseId)],
         };
+        delete updatedFormData.courseId;
 
         try {
             const response = await fetch('https://api.tmero.com/register', {
@@ -295,23 +306,29 @@ const SignupPage = () => {
                                     )}
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <select 
-                                        name="courses" 
-                                        required 
+                                    <select
+                                        name="courseId"
+                                        required
                                         onChange={handleInputChange}
                                         onBlur={handleBlur}
-                                        defaultValue=""
-                                        className={touchedFields.courses && formErrors.courses ? styles.error : ''}
+                                        value={formData.courseId}
+                                        className={touchedFields.courseId && formErrors.courseId ? styles.error : ''}
+                                        disabled={coursesLoading || coursesError}
                                     >
-                                        <option value="" disabled>Select Language</option>
-                                        <option value="Afaan Oromo">Afaan Oromo</option>
-                                        <option value="Amharic">Amharic</option>
-                                        <option value="Somali">Somali</option>
-                                        <option value="Tigrigna">Tigrigna</option>
-                                        <option value="Swahili">Swahili</option>
+                                        <option value="" disabled>
+                                            {coursesLoading ? 'Loading languages...' : 'Select Language'}
+                                        </option>
+                                        {courses.map(course => (
+                                            <option key={course.id} value={course.id}>
+                                                {course.title}
+                                            </option>
+                                        ))}
                                     </select>
-                                    {touchedFields.courses && formErrors.courses && (
-                                        <div className={styles.fieldError}>{formErrors.courses}</div>
+                                    {touchedFields.courseId && formErrors.courseId && (
+                                        <div className={styles.fieldError}>{formErrors.courseId}</div>
+                                    )}
+                                    {coursesError && (
+                                        <div className={styles.fieldError}>{coursesError}</div>
                                     )}
                                 </div>
                                 <div className={styles.formGroup}>

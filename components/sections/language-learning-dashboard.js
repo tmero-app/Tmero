@@ -105,13 +105,22 @@ export default function LanguageLearningDashboard() {
           if (res.ok && data.data) {
             if (Array.isArray(data.data)) {
               data.data.forEach(item => {
-                if (item && (item.seen === 1 || item.seen === true)) {
-                  progressObj[item.id] = true;
+                if (
+                  item &&
+                  (item.seen === 1 || item.seen === true) &&
+                  item.courseOutline &&
+                  item.courseOutline.id
+                ) {
+                  progressObj[item.courseOutline.id] = true;
                 }
               });
             } else if (typeof data.data === 'object') {
-              if (data.data.seen === 1 || data.data.seen === true) {
-                progressObj[data.data.id] = true;
+              if (
+                (data.data.seen === 1 || data.data.seen === true) &&
+                data.data.courseOutline &&
+                data.data.courseOutline.id
+              ) {
+                progressObj[data.data.courseOutline.id] = true;
               }
             }
           }
@@ -124,7 +133,7 @@ export default function LanguageLearningDashboard() {
           title: outline.outline,
           description: `Learn ${outline.outline.toLowerCase()} in ${course.title}`,
           tasks: [{
-            id: outline.id.toString(),
+            id: outline.id,
             title: outline.outline,
             description: `Master ${outline.outline.toLowerCase()} in ${course.title}`,
             duration: '25 min',
